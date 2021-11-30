@@ -10,8 +10,6 @@ ________________________
 ![terraform](terraform.png)
 ________________________
 
-Скриншот 
-
 Скриншот MarkDown:
 
 ![markdown](markdown.png)
