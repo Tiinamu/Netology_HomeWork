@@ -1,11 +1,11 @@
 # Netology_HomeWork
 
-Скриншот yaml:
+Скриншот Terraform:
 
 ![yaml](yaml.png)
 ________________________
 
-Скриншот Terraform:
+Скриншот yaml:
 
 ![terraform](terraform.png)
 ________________________
