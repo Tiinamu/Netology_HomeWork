@@ -54,3 +54,8 @@ ________________________
 1. https://github.com/Tiinamu/Netology_HomeWork/
 2. https://gitlab.com/Tiinamu/netology_homework/
 3. https://bitbucket.org/tiinamu/netology_homework/
+
+## Домашнее задание к занятию «2.3. Ветвления в Git»
+
+Ссылка на итоговый граф по результатам выполнения ДЗ:
+https://github.com/Tiinamu/Netology_HomeWork/network
