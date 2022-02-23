@@ -70,7 +70,7 @@ https://github.com/Tiinamu/Netology_HomeWork/network
  
 2. Установите средство автоматизации Hashicorp Vagrant.
 
-![3_1_1](pictures/3_1_1.png)
+![3_1_2](pictures/3_1_2.png)
  
 3. Подготовьте удобный для дальнейшей работы терминал.
 
