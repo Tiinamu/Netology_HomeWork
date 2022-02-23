@@ -66,7 +66,7 @@ https://github.com/Tiinamu/Netology_HomeWork/network
 
 1. Установите средство виртуализации Oracle VirtualBox.
 
-
+![3_1_1](pictures/3_1_1.png)
  
 2. Установите средство автоматизации Hashicorp Vagrant.
  
