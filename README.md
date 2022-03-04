@@ -468,10 +468,9 @@ ________________________
  
 7. Чем отличается последовательность команд через ; и через && в bash? Например:
  
-root@netology1:~# test -d /tmp/some_dir; echo Hi
+~# test -d /tmp/some_dir; echo Hi
 Hi
-root@netology1:~# test -d /tmp/some_dir && echo Hi
-root@netology1:~#
+~# test -d /tmp/some_dir && echo Hi
 
 Есть ли смысл использовать в bash &&, если применить set -e?
 
