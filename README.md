@@ -338,3 +338,206 @@ ________________________
  
 Команда tee делает вывод одновременно и в файл, указаный в качестве параметра, и в stdout, в данном примере команда получает вывод из stdin, перенаправленный через pipe от stdout команды echo и так как команда запущена от sudo , соотвественно имеет права на запись в файл
 
+
+## Домашнее задание к занятию «3.3. Операционные системы, лекция 1» 
+
+1. Какой системный вызов делает команда cd? В прошлом ДЗ мы выяснили, что cd не являет-ся самостоятельной программой, это shell builtin, поэтому запустить strace непосредственно на cd не получится. Тем не менее, вы можете запустить strace на /bin/bash -c 'cd /tmp'. В этом случае вы увидите полный список системных вызовов, которые делает сам bash при старте. Вам нужно найти тот единственный, который относится именно к cd. Обратите внимание, что strace выдаёт результат своей работы в поток stderr, а не в stdout.
+
+Сначала системный вызов execve выполняет программу, которая передается ему в параметрах (в данном случае это cd ):  
+execve("/bin/bash", ["/bin/bash", "-c", "cd /tmp"], 0x7ffd468534e0 /* 23 vars */) = 0
+
+Затем в системный вызов stat передается параметр tmp:
+stat("/tmp", {st_mode=S_IFDIR|S_ISVTX|0777, st_size=4096, ...}) = 0
+
+Затем системный вызов меняет каталог, выполняя ожидаемое действие команды:
+chdir("/tmp")                           = 0
+________________________
+
+2. Попробуйте использовать команду file на объекты разных типов на файловой системе. Например:
+vagrant@netology1:~$ file /dev/tty
+/dev/tty: character special (5/0)
+
+vagrant@netology1:~$ file /dev/sda
+/dev/sda: block special (8/0)
+
+vagrant@netology1:~$ file /bin/bash
+/bin/bash: ELF 64-bit LSB shared object, x86-64
+
+Используя strace выясните, где находится база данных file на основании которой она делает свои догадки.
+ 
+С помощью команды strace file /dev/sda 2>&1 | grep open  вычислим все строки с попаданием “open”, т.к. подразуме-ваем, что базу данных надо найти и открыть:
+ 
+![3_3_1](pictures/3_3_1.PNG)
+ 
+Далее пробежимся командой cat по всем файлам и проверим совпадения по выводу character special, block special, LSB shared object:
+cat /lib/x86_64-linux-gnu/libmagic.so.1 | grep -a "block special"
+cat /usr/share/misc/magic.mgc | grep -a "LSB"
+
+Файлов, удовлетворяющих условию – два – /lib/x86_64-linux-gnu/libmagic.so.1 и usr/share/misc/magic.mgc. 
+________________________
+ 
+3. Предположим, приложение пишет лог в текстовый файл. Этот файл оказался удален (deleted в lsof), однако возможности сигналом сказать приложению переоткрыть файлы или просто перезапустить приложение – нет. Так как приложение продолжает писать в удален-ный файл, место на диске постепенно заканчивается. Основываясь на знаниях о перенаправ-лении потоков предложите способ обнуления открытого удаленного файла (чтобы освобо-дить место на файловой системе).
+ 
+Запустим команду echo в бесконечном цикле с предусловием:
+ 
+![3_3_2](pictures/3_3_2.PNG)
+ 
+Далее проверим в lsof наличие процесса с выполнением этой команды и удалим файл tt, куда производится запись. При этом при следующем запуске lsof появится пометка (deleted), но сам файл продолжит расти.
+ 
+![3_3_3](pictures/3_3_3.PNG)
+ 
+Перенаправим поток команды (на скрине выше видим, что это третий файл дескриптор) в никуда:
+Можно было бы в него скопировать пустоту, но это временная мера:
+cp /dev/null /proc/18586/fd/3  
+т.к. файл растет онлайн, направим поток STDOUT с него в никуда:
+~$ /proc/18586/fd/3  >/dev/null
+________________________
+ 
+4. Занимают ли зомби-процессы какие-то ресурсы в ОС (CPU, RAM, IO)?
+ 
+Создадим файл с кодом С:
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <errno.h>
+ 
+int main ()
+{
+  pid_t child_pid;
+  int child_status;
+ 
+  child_pid = fork ();
+  if (child_pid > 0) {
+    // parent process will sleep for 30 seconds and exit, without a call to wait()
+    fprintf(stderr,"parent process - %d\n", getpid());    
+    sleep(30); 
+    exit(0);
+  }
+  else if (child_pid == 0) {
+    // child process will exit immediately
+    fprintf(stderr,"child process - %d\n", getpid());
+    exit(0);    
+  }
+  else if (child_pid == -1) {
+    // fork() error
+    perror("fork() call failed");    
+    exit (-1);
+  }
+  else {
+    // this should not happen
+    fprintf(stderr, "unknown return value of %d from fork() call", child_pid);
+    exit (-2);
+  }
+  return 0;
+}
+
+Сохраняем файл под именем zombie.c, компилируем с помощью gcc:
+
+![3_3_4](pictures/3_3_4.PNG)
+ 
+Запускаем, видим результат:
+
+![3_3_5](pictures/3_3_5.PNG)
+ 
+Проверяем – видим, что потребления ресурсов нет:
+
+![3_3_6](pictures/3_3_6.PNG)
+ 
+________________________
+ 
+5. В iovisor BCC есть утилита opensnoop:
+
+root@vagrant:~# dpkg -L bpfcc-tools | grep sbin/opensnoop
+/usr/sbin/opensnoop-bpfcc
+
+На какие файлы вы увидели вызовы группы open за первую секунду работы утилиты? Вос-пользуйтесь пакетом bpfcc-tools для Ubuntu 20.04. Дополнительные сведения по установке.
+
+![3_3_7](pictures/3_3_7.PNG)
+ 
+________________________
+ 
+6. Какой системный вызов использует uname -a? Приведите цитату из man по этому систем-ному вызову, где описывается альтернативное местоположение в /proc, где можно узнать версию ядра и релиз ОС.
+ 
+Через man 2 uname находим:
+ 
+![3_3_8](pictures/3_3_8.PNG)
+ 
+________________________
+ 
+7. Чем отличается последовательность команд через ; и через && в bash? Например:
+root@netology1:~# test -d /tmp/some_dir; echo Hi
+Hi
+root@netology1:~# test -d /tmp/some_dir && echo Hi
+root@netology1:~#
+
+Есть ли смысл использовать в bash &&, если применить set -e?
+
+ 
+Последовательность команд через && - команды соединены условным оператором И
+Последовательность команд через ; - команды соединены разделителем команд
+
+Оператор ; выполняет несколько команд одновременно последовательно и обеспечивает вывод без зависимости от успеха и отказа других команд, в отличие от &&, где вторая команда выполняется только после успешной первой команды.
+Set -e - прерывает сессию при любом ненулевом значении исполняемых команд кроме последней.
+
+Применять &&  вместе с set -e- не имеет смысла.
+ 
+________________________
+
+8. Из каких опций состоит режим bash set -euxo pipefail и почему его хорошо было бы ис-пользовать в сценариях?
+ 
+![3_3_9](pictures/3_3_9.PNG)
+
+-e  Exit immediately if a command exits with a non-zero status.
+-u  Treat unset variables as an error when substituting.
+-x  Print commands and their arguments as they are executed.
+-o option-name
+          Set the variable corresponding to option-name:
+              allexport    same as -a
+              braceexpand  same as -B
+              emacs        use an emacs-style line editing interface
+              errexit      same as -e
+              errtrace     same as -E
+              functrace    same as -T
+              hashall      same as -h
+              histexpand   same as -H
+              history      enable command history
+              ignoreeof    the shell will not exit upon reading EOF
+              interactive-comments
+                           allow comments to appear in interactive commands
+              keyword      same as -k
+              monitor      same as -m
+              noclobber    same as -C
+              noexec       same as -n
+              noglob       same as -f
+              nolog        currently accepted but ignored
+              notify       same as -b
+ ________________________
+ 
+ 9. Используя -o stat для ps, определите, какой наиболее часто встречающийся статус у про-цессов в системе. В man ps ознакомьтесь (/PROCESS STATE CODES) что значат дополнитель-ные к основной заглавной буквы статуса процессов. Его можно не учитывать при расчете (считать S, Ss или Ssl равнозначными).
+ 
+Выгрузим все значения stat в файл:
+
+![3_3_10](pictures/3_3_10.PNG)
+
+Выполним операцию wc для всех видов stat:
+ 
+![3_3_11](pictures/3_3_11.PNG)
+ 
+Получим:
+S – 57 
+I – 45 
+Ss – 20 
+Ssl – 7
+Затем идут Rm R+, Z и др.
+
+Т.о. самыми частыми являются процессы, ожидающие завершения (S) и бездействующие (I).
+
+![3_3_12](pictures/3_3_12.PNG)
+ 
+Затем идут Rm R+, Z и др.
+
+Т.о. самыми частыми являются процессы, ожидающие завершения (S) и бездействующие (I).
+
+ ________________________
