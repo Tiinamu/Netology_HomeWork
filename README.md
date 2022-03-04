@@ -490,9 +490,13 @@ ________________________
 ![3_3_9](pictures/3_3_9.PNG)
 
 -e  Exit immediately if a command exits with a non-zero status.
+ 
 -u  Treat unset variables as an error when substituting.
+ 
 -x  Print commands and their arguments as they are executed.
+ 
 -o option-name
+ 
           Set the variable corresponding to option-name:
               allexport    same as -a
               braceexpand  same as -B
