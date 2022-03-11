@@ -552,3 +552,208 @@ Ssl – 7
 Т.о. самыми частыми являются процессы, ожидающие завершения (S) и бездействующие (I).
 
  ________________________
+
+ 
+ ## Домашнее задание к занятию «3.4. Операционные системы, лекция 2» 
+
+1.	На лекции мы познакомились с node_exporter. В демонстрации его исполняемый файл запускался в background. Этого достаточно для демо, но не для настоящей production-системы, где процессы должны находиться под внешним управлением. Используя знания из лекции по systemd, создайте самостоятельно простой unit-файл для node_exporter:
+o	поместите его в автозагрузку,
+o	предусмотрите возможность добавления опций к запускаемому процессу через внешний файл (посмотрите, например, на systemctl cat cron),
+o	удостоверьтесь, что с помощью systemctl процесс корректно стартует, завершает-ся, а после перезагрузки автоматически поднимается.
+
+Скачиваем node_exporter в домашнюю папку: 
+wget  https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+Распаковываем в домашнюю папку:
+tar -xzvf node_exporter-1.3.1.linux-amd64.tar.gz
+
+Подготавливаем Unit-файл, размещаем его в директории /etc/systemd/system. Заполняем основные разделы – Unit, Ser-vice, Install:
+[Unit]
+Description=MONITORING LINUX HOST METRICS WITH THE NODE EXPORTER
+Documentation=https://github.com/prometheus/node_exporter/blob/master/README.md
+[Service]
+EnvironmentFile=-/etc/default/node_exporter
+ExecStart=/bin/bash -c /home/vagrant/node_exporter-1.3.1.linux-amd64/node_exporter
+[Install]
+WantedBy=multi-user.target
+
+![3_4_1](pictures/3_4_1.JPG)
+ 
+Последовательно производим:
+vagrant@vagrant:/etc/systemd/system$ sudo systemctl daemon-reload (перезапуск демона сервисов), 
+vagrant@vagrant:/etc/systemd/system$ sudo systemctl start node_exporter (Старт сервиса)
+vagrant@vagrant:/etc/systemd/system$ sudo systemctl enable node_exporter (Добавление сервиса в автозагрузку)
+
+Далее проверяем статус сервиса:
+vagrant@vagrant:/etc/systemd/system$ sudo systemctl status node_exporter
+
+
+Видим, что сервис запустился:
+
+![3_4_2](pictures/3_4_2.JPG)
+ 
+curl -s localhost:9100/metrics 2>/dev/null | grep node_filesystem_avail_bytes | grep mapper
+ 
+![3_4_3](pictures/3_4_3.JPG)
+ 
+________________________
+ 
+2. Ознакомьтесь с опциями node_exporter и выводом /metrics по-умолчанию. Приведите несколько оп-ций, которые вы бы выбрали для базового мониторинга хоста по CPU, памяти, диску и сети.
+
+По CPU:
+Среди прочих полезных метрик:
+
+node_cpu_seconds_total:
+
+![3_4_4](pictures/3_4_4.JPG)
+ 
+По ОЗУ:  
+Среди прочих полезных метрик:
+
+process_virtual_memory_max_bytes
+node_memory_MemTotal_bytes.
+node_memory_MemFree_bytes.
+node_memory_Cached_bytes.
+node_memory_Buffers_bytes.
+
+process_virtual_memory_max_bytes (Максимальный объем доступной виртуальной памяти в байтах)
+
+![3_4_5](pictures/3_4_5.JPG)
+ 
+Диск:
+Среди прочих полезных метрик:
+
+node_disk_info
+node_disk_info
+node_filesystem_size_bytes.
+node_filesystem_avail_bytes.
+node_filesystem_free_bytes.
+node_disk_read_bytes_total.
+node_disk_written_bytes_total.
+
+node_disk_info (информаций по количеству разделов)
+
+![3_4_6](pictures/3_4_6.JPG)
+ 
+node_disk_discard_time_seconds_total  (общее количество секунд, затраченных на все отбрасывания)
+ 
+![3_4_7](pictures/3_4_7.JPG)
+ 
+
+Сеть:
+Среди прочих полезных метрик:
+node_network_up
+node_network_receive_drop_total
+node_network_receive_errs_total
+node_network_receive_bytes_total
+node_network_transmit_bytes_total
+
+node_network_up  (поднятые интерфейсы):
+
+![3_4_8](pictures/3_4_8.JPG)
+ 
+________________________
+ 
+3. Установите в свою виртуальную машину Netdata. Воспользуйтесь готовыми пакетами для установки (sudo apt install -y netdata). После успешной установки:
+o	в конфигурационном файле /etc/netdata/netdata.conf в секции [web] замените значение с localhost на bind to = 0.0.0.0,
+o	добавьте в Vagrantfile проброс порта Netdata на свой локальный компьютер и сделайте vagrant reload:
+config.vm.network "forwarded_port", guest: 19999, host: 19999
+После успешной перезагрузки в браузере на своем ПК (не в виртуальной машине) вы должны суметь зайти на localhost:19999. Ознакомьтесь с метриками, которые по умолчанию собираются Netdata и с комментариями, которые даны к этим метрикам.
+
+- Устанавливаем Netdata
+
+-- sudo apt install -y netdata:
+ 
+![3_4_9](pictures/3_4_9.JPG)
+ 
+-- правим конфигурационный файл /etc/netdata/netdata.conf – добавляем секцию [web]:
+ 
+![3_4_10](pictures/3_4_10.JPG)
+ 
+![3_4_11](pictures/3_4_11.JPG)
+ 
+- Правим Vagrantfile:
+
+-- установка загрузчика Chocolatey для того, чтобы в дальнейшем установить с помощью него nano для Powershell:
+
+PS C:\Users\Банцерев Артем> set-executionpolicy bypass -scope process -force; iex ((new-object sys-tem.net.webclient).downloadstring('https://chocolatey.org/install.ps1'))
+ 
+![3_4_12](pictures/3_4_12.JPG)
+
+-- установка nano для Powershell:
+
+PS C:\Users\Банцерев Артем> choco install nano:
+
+![3_4_13](pictures/3_4_13.JPG)
+
+-- правим Vagrantfile, добавляя строку 
+config.vm.network "forwarded_port", guest: 19999, host: 19999
+
+![3_4_14](pictures/3_4_14.JPG)
+ 
+-- делаем vagrant reload:
+
+![3_4_15](pictures/3_4_15.JPG)
+
+-- теперь с хостовой машины доступна страница http://localhost:19999/:
+
+![3_4_16](pictures/3_4_16.JPG)
+ 
+________________________
+ 
+4. Можно ли по выводу dmesg понять, осознает ли ОС, что загружена не на настоящем обору-довании, а на системе виртуализации?
+
+Да, в выводе команды присутствует информация о системе виртуализации:
+
+![3_4_17](pictures/3_4_17.JPG)
+ 
+________________________
+ 
+5. Как настроен sysctl fs.nr_open на системе по-умолчанию? Узнайте, что означает этот пара-метр. Какой другой существующий лимит не позволит достичь такого числа (ulimit --help)?
+
+![3_4_18](pictures/3_4_18.JPG)
+ 
+fs.nr_open  - это максимальное число открытых дескрипторов для системы. 
+
+Смотрим Help:
+
+![3_4_19](pictures/3_4_19.JPG)
+ 
+Максимальное количество открытых дескрипторов для жесткого и мягкого лимита ниже:
+ 
+![3_4_20](pictures/3_4_20.JPG)
+ 
+________________________
+ 
+6. Запустите любой долгоживущий процесс (не ls, который отработает мгновенно, а, напри-мер, sleep 1h) в отдельном неймспейсе процессов; покажите, что ваш процесс работает под PID 1 через nsenter. Для простоты работайте в данном задании под root (sudo -i). Под обычным пользователем требуются дополнительные опции (--map-root-user) и т.д.
+
+Заходим под рутом, запускаем sleep 1h через unshare, смотрим вывод ps (PID = 1652)
+
+![3_4_21](pictures/3_4_21.JPG)
+ 
+Заходим в неймспейс, убеждаемся, что PID = 1:
+
+![3_4_22](pictures/3_4_22.JPG)
+ 
+________________________
+ 
+7. Найдите информацию о том, что такое :(){ :|:& };:. Запустите эту команду в своей виртуальной машине Vagrant с Ubuntu 20.04 (это важно, поведение в других ОС не проверялось). Некоторое время все будет "плохо", после чего (минуты) – ОС должна стабилизироваться. Вы-зов dmesg расскажет, какой механизм помог автоматической стабилизации. Как настроен этот механизм по-умолчанию, и как изменить число процессов, которое можно создать в сессии?
+
+После ввода :(){ :|:& };: видим:
+
+![3_4_23](pictures/3_4_23.JPG)
+ 
+Что сопровождается загрузкой в 100% CPU:
+
+![3_4_24](pictures/3_4_24.JPG)
+ 
+По выводу dmesg видим, что процесс прекращается с помощью механизма fork rejected:
+ 
+![3_4_25](pictures/3_4_25.JPG)
+ 
+Выход из зацикливания произошел при превышении параметров по умолчанию, которые моно посмотреть с помощью ulimit -a:
+ 
+![3_4_26](pictures/3_4_26.JPG)
+ 
+Регулируя эти лимиты, можно выйти из зацикливания по другим критериям. Число процессов, которые можно создать в сессии, выставляется с помощью ulimit -u.  Так, для 100 процессов надо выставить ulimit -u 100:
+ 
+![3_4_27](pictures/3_4_27.JPG)
