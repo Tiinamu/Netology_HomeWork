@@ -824,6 +824,7 @@ f
  
 Данная конфигурация создаст новую виртуальную машину с двумя дополнительными неразмеченными дисками по 2.5 Гб.
 После создания новой виртуальной машины видим, что появилось два неразмеченных дисками по 2,5 ГБ.
+ 
      Vagrant.configure("2") do |config|
       config.vm.box = "bento/ubuntu-20.04"
       config.vm.provider :virtualbox do |vb|
@@ -835,6 +836,7 @@ f
         vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', lvm_experiments_disk1_path]
       end
     end
+ 
 ![3_5_4](pictures/3_5_4.JPG)
 ________________________
  
