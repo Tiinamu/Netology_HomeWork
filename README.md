@@ -797,8 +797,8 @@ ________________________
 ________________________
  
 3.  Сделайте vagrant destroy на имеющийся инстанс Ubuntu. Замените содержимое Vagrantfile следующим.
- 
-    Vagrant.configure("2") do |config|
+
+     Vagrant.configure("2") do |config|
       config.vm.box = "bento/ubuntu-20.04"
       config.vm.provider :virtualbox do |vb|
         lvm_experiments_disk0_path = "/tmp/lvm_experiments_disk0.vmdk"
