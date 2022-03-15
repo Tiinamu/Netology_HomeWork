@@ -1015,6 +1015,7 @@ __1.  Работа c HTTP через телнет.__
 HOST: stackoverflow.com
 [press enter]
 [press enter]```
+ 
 •	В ответе укажите полученный HTTP код, что он означает?
 
 Код 301 указывает на то, что страница перемещена постоянно на location: https://stackoverflow.com/questions
