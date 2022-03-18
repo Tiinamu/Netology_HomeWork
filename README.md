@@ -1298,10 +1298,10 @@ __7.  Как проверить ARP таблицу в Linux, Windows? Как о�
  
 ![3_7_9](pictures/3_7_9.JPG)
 
-|             |    Linux    |    Windows    |
+|             |        Linux        |        Windows        |
 |-------------|-------------|---------------| 
 |Проверить arp-таблицу| ip neigh, arp -n | arp -a |
 |Очистить кэш так |ip neigh flush | arp -d |
-|Удалить один IP | arp -d <IP>; ip neigh delete <IP> dev <INTERFACE>  | arp -d <IP> |
+|Удалить один IP | arp -d *IP*; ip neigh delete *IP* dev *INTERFACE*  | arp -d *IP* |
 
 ________________________
