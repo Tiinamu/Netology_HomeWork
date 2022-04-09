@@ -1407,4 +1407,170 @@ __5.  Используя diagrams.net, создайте L3 диаграмму в
 ![3_8_13](pictures/3_8_13.JPG)
 ________________________
 
+## Домашнее задание к занятию «3.9. Элементы безопасности информационных систем» 
 
+__1.  Установите Bitwarden плагин для браузера. Зарегестрируйтесь и сохраните несколько паролей.__
+ 
+Выполнено:
+
+![3_9_1](pictures/3_9_1.JPG)
+________________________
+
+__2.  Установите Google authenticator на мобильный телефон. Настройте вход в Bitwarden акаунт через Google authenticator OTP.__
+
+Выполнено:
+
+![3_9_2](pictures/3_9_2.JPG)
+________________________
+
+__3.  Установите apache2, сгенерируйте самоподписанный сертификат, настройте тестовый сайт для работы по HTTPS.__
+
+3.1. Установка apache2:
+```
+vagrant@vagrant:~$ sudo apt update
+vagrant@vagrant:~$ sudo apt install apache2
+```
+Проверка Web-сервера:
+```
+vagrant@vagrant:~$ sudo systemctl status apache2
+```
+![3_9_3](pictures/3_9_3.JPG)
+
+3.2. Создание сертификата SSL и ключа:
+ 
+Протоколы TLS и SSL используют сочетание открытого сертификата и закрытого ключа. Секретный ключ SSL хранится на сервере. Он используется для шифрования отправляемых на клиентские системы данных. Сертификат SSL находится в открытом доступе для всех, кто запрашивает этот контент. Его можно использовать для расшифровки контента, подписанного соответствующим ключом SSL.
+Мы можем создать самоподписанный ключ и пару сертификатов OpenSSL с помощью одной команды:
+```
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+```
+ 
+Включаем модуль Apache для SSL, mod_ssl, и модуль mod_headers, который необходим для работы сниппета SSL:
+```
+sudo a2enmod ssl
+sudo a2enmod headers
+```
+ 
+Включаем подготовленный виртуальный хост:
+```
+sudo a2ensite testseq.com
+```
+ 
+Перезапускаем Apache, чтобы активировать изменения:
+```
+sudo systemctl restart apache2
+```
+ 
+Теперь сайт и все необходимые модули включены. Проверяем синтаксис на наличие ошибок:
+```
+sudo apache2ctl configtest
+```
+ 
+Проверяем:
+
+![3_9_4](pictures/3_9_4.JPG)
+________________________
+
+__4.  Проверьте на TLS уязвимости произвольный сайт в интернете (кроме сайтов МВД, ФСБ, МинОбр, НацБанк, РосКосмос, РосАтом, РосНАНО и любых госкомпаний, объектов КИИ, ВПК и т.п.)__
+ 
+```
+$ git clone --depth 1 https://github.com/drwetter/testssl.sh.git 
+$ cd testssl.sh
+```
+ 
+Проверим два сайта – Kaspersky.ru и SPT-RZN.RU (не продлевался SSL-сертификат):
+ 
+![3_9_5](pictures/3_9_5.JPG)
+ 
+![3_9_6](pictures/3_9_6.JPG)
+________________________
+ 
+__5.  Установите на Ubuntu ssh сервер, сгенерируйте новый приватный ключ. Скопируйте свой публичный ключ на другой сервер. Подключитесь к серверу по SSH-ключу.__
+ 
+Установка sshd сервера:
+```
+$ apt install openssh-server
+$ systemctl start sshd.service
+$ systemctl enable sshd.service
+```
+
+Генерация ключей 
+(/home/vagrant/.ssh/id_rsa – приватный ключ) 
+(/home/vagrant/.ssh/id_rsa.pub – публичный ключ)
+
+```
+$ ssh-keygen
+```
+![3_9_10](pictures/3_9_10.JPG)
+
+Копируем публичный ключ на сервер:
+```
+ssh-copy-id -i .ssh/id_rsa vagrant@10.0.2.15
+```
+ 
+Если после копирования прописать в файле /etc/ssh/sshd_config   следующие строки
+```
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile             .ssh/authorized_keys    .ssh/authorized_keys2
+```
+(+ sudo service ssh restart)
+
+то  можно будет подключаться так:
+
+![3_9_11](pictures/3_9_11.JPG)
+ 
+Проверим, что поднялась новая сессия SSH:
+```
+sudo netstat -tnpa | grep vagrant
+```
+![3_9_12](pictures/3_9_12.JPG)
+ 
+Также наблюдаем через процессы, что появился процесс для pts/1:
+```
+ps aux | grep ssh:
+```
+![3_9_13](pictures/3_9_13.JPG)
+________________________
+ 
+__6.  Переименуйте файлы ключей из задания 5. Настройте файл конфигурации SSH клиента, так чтобы вход на удаленный сервер осуществлялся по имени сервера.__
+
+Переименовываем:
+```
+vagrant@vagrant:~/.ssh$ mv id_rsa id_rsa_rename
+vagrant@vagrant:~/.ssh$ mv id_rsa.pub id_rsa.pub_rename
+```
+![3_9_14](pictures/3_9_14.JPG)
+
+Настраиваем файл коняигурации:
+```
+~/.ssh $ touch config
+
+Host renamekeys
+        HostName 10.0.2.15
+        User vagrant
+        Port 22
+        IdentityFile ~/.ssh/id_rsa_rename
+
+```
+Заходим по имени renamekeys, проверяем наличие новой сессии:
+
+![3_9_15](pictures/3_9_15.JPG) 
+________________________
+
+__7.  Соберите дамп трафика утилитой tcpdump в формате pcap, 100 пакетов. Откройте файл pcap в Wireshark.__
+ 
+Собираем трафик утилитой:
+```
+$ sudo tcpdump -c 100 -w for_analyze_wireshark.pcap
+```
+![3_9_16](pictures/3_9_16.JPG)  
+ 
+Перетаскиваем через WinSCP:
+ 
+![3_9_17](pictures/3_9_17.JPG)  
+ 
+Открываем в WireShark:
+ 
+![3_9_18](pictures/3_9_18.JPG)  
+
+________________________
