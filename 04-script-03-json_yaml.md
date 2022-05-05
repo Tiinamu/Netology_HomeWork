@@ -44,10 +44,10 @@ while (1==1):
         ip_current = socket.gethostbyname(service_current)
         if(ip_current == services_ip[service_current]):
             print(f'Всё ok: {service_current} - старый сдрес: {services_ip[service_current]}; новый адрес:{ip_current}')
-            __with open("servers_ip_json.json", "w") as json_file:
+            with open("servers_ip_json.json", "w") as json_file:
                  json_file.write(json.dumps(services_ip))
             with open("servers_ip_yaml.yaml", "w") as yaml_file:
-                 yaml_file.write(yaml.dump(services_ip))__
+                 yaml_file.write(yaml.dump(services_ip))
         else:
             print(f'Обнаружено несоответствие: {service_current} - старый адрес: {services_ip[service_current]};  текущий адрес: {ip_current}')
             services_ip[service_current] = ip_current
