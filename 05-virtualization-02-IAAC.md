@@ -20,7 +20,7 @@ Ansible выгодно отличается от других систем ви�
 
 __3.	Задача 3__
 
-__•	Установить на личный компьютер:
+__•	Установить на личный компьютер:__
 __•	VirtualBox__
 __•	Vagrant__
 __•	Ansible__
@@ -39,11 +39,11 @@ artem@ubuntu:~/vagrant_mine/ubuntu20$ vboxmanage --version
 ```
 __Проверяем версию ansible:__
 ```
-vagrant@vagrant:~$ ansible --version
+artem@ubuntu:~/vagrant_mine/ubuntu20$ ansible --version
 ansible 2.9.6
   config file = /etc/ansible/ansible.cfg
-  configured module search path = ['/home/vagrant/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  configured module search path = ['/home/artem/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
   ansible python module location = /usr/lib/python3/dist-packages/ansible
   executable location = /usr/bin/ansible
-  python version = 3.8.10 (default, Nov 26 2021, 20:14:08) [GCC 9.3.0]
+  python version = 3.8.10 (default, Mar 15 2022, 12:22:08) [GCC 9.4.0]
 ```
