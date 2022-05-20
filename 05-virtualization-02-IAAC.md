@@ -45,6 +45,7 @@ PS C:\>
 
 __Проверяем доступные нам образы операционных систем:__
 
+```
 vagrant@vagrant:~$ ansible --version
 ansible 2.9.6
   config file = /etc/ansible/ansible.cfg
