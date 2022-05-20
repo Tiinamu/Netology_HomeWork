@@ -30,17 +30,17 @@ __•	Ansible__
 
 __Приложить вывод команд установленных версий каждой из программ, оформленный в markdown.__
 
-__Проверяем версию VirtualBox:__
+__• Проверяем версию VirtualBox:__
 ```
 artem@ubuntu:/$ vagrant -v
 Vagrant 2.2.19
 ```
-__Проверяем версию VirtualBox:__
+__• Проверяем версию VirtualBox:__
 ```
 artem@ubuntu:~/vagrant_mine/ubuntu20$ vboxmanage --version
 6.1.32_Ubuntur149290
 ```
-__Проверяем версию ansible:__
+__• Проверяем версию ansible:__
 ```
 artem@ubuntu:~/vagrant_mine/ubuntu20$ ansible --version
 ansible 2.9.6
