@@ -41,10 +41,10 @@ __Проверяем доступные нам образы операционн
 PS C:\> vagrant box list
 bento/ubuntu-20.04 (virtualbox, 202112.19.0)
 PS C:\>
-
-__Проверяем версию ansible:__ 
-
 ```
+
+__Проверяем доступные нам образы операционных систем:__
+
 vagrant@vagrant:~$ ansible --version
 ansible 2.9.6
   config file = /etc/ansible/ansible.cfg
