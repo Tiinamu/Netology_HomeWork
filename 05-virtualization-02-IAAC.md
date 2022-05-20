@@ -27,24 +27,17 @@ __•	Ansible__
 
 __Приложить вывод команд установленных версий каждой из программ, оформленный в markdown.__
 
-Проверяем доступные нам образы операционных систем:
-
+__Проверяем версию VirtualBox:__
 ```
-PS C:\>  vagrant --version
+artem@ubuntu:/$ vagrant -v
 Vagrant 2.2.19
-PS C:\>
 ```
-
-__Проверяем доступные нам образы операционных систем:__
-
+__Проверяем версию VirtualBox:__
 ```
-PS C:\> vagrant box list
-bento/ubuntu-20.04 (virtualbox, 202112.19.0)
-PS C:\>
+artem@ubuntu:~/vagrant_mine/ubuntu20$ vboxmanage --version
+6.1.32_Ubuntur149290
 ```
-
-__Проверяем доступные нам образы операционных систем:__
-
+__Проверяем версию ansible:__
 ```
 vagrant@vagrant:~$ ansible --version
 ansible 2.9.6
@@ -54,4 +47,3 @@ ansible 2.9.6
   executable location = /usr/bin/ansible
   python version = 3.8.10 (default, Nov 26 2021, 20:14:08) [GCC 9.3.0]
 ```
-
