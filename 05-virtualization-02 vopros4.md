@@ -35,6 +35,7 @@ drwxrwxr-x  4 artem artem 4,0K мая 20 23:38 .vagrant
 ```
 
 Содержание файла Vagrantfile:
+```
 ISO = "bento/ubuntu-20.04"
 NET = "192.168.192."
 DOMAIN = ".netology"
