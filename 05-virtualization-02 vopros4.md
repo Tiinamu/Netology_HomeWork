@@ -21,3 +21,57 @@ ansible 2.9.6
   executable location = /usr/bin/ansible
   python version = 3.8.10 (default, Mar 15 2022, 12:22:08) [GCC 9.4.0]
 ```
+
+Создана папка vagrant в домашней директории, далее произведен *vagrant init* и добавлены файл ansible.cfg и папка ansible для хранения playbook-а :
+```
+artem@ubuntu:~/vagrant$ ls -lha
+итого 40K
+drwxrwxr-x  4 artem artem 4,0K мая 21 03:45 .
+drwxr-xr-x 24 artem artem 4,0K мая 20 23:45 ..
+drwxrwxr-x  2 artem artem 4,0K мая 22 05:07 ansible
+-rw-r--r--  1 artem artem  20K мая 21 02:40 ansible.cfg
+drwxrwxr-x  4 artem artem 4,0K мая 20 23:38 .vagrant
+-rw-rw-r--  1 artem artem 1,2K мая 21 00:46 Vagrantfile
+```
+
+Содержание файла Vagrantfile:
+ISO = "bento/ubuntu-20.04"
+NET = "192.168.192."
+DOMAIN = ".netology"
+HOST_PREFIX = "server"
+INVENTORY_PATH = "/home/artem/vagrant/ansible/inventory"
+
+servers = [
+ {
+         :hostname => HOST_PREFIX + "1" + DOMAIN,
+         :ip => NET + "11",
+         :ssh_host => "20011",
+         :ssh_vm => "22",
+         :ram => 1024,
+         :core => 1
+ }
+]
+
+Vagrant.configure(2) do |config|
+        config.vm.synced_folder ".", "/vagrant", disabled: false
+        servers.each do |machine|
+                config.vm.define machine[:hostname] do |node|
+                        node.vm.box = ISO
+                        node.vm.hostname = machine[:hostname]
+                        node.vm.network "private_network", ip: machine[:ip]
+                        node.vm.network :forwarded_port, guest: machine[:ssh_vm], host: machine[:ssh_host]
+                        node.vm.provider "virtualbox" do |vb|
+                                vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
+                                vb.customize ["modifyvm", :id, "--cpus", machine[:core]]
+                                vb.name = machine[:hostname]
+                        end
+                        node.vm.provision "ansible" do |setup|
+                                setup.inventory_path = INVENTORY_PATH
+                                setup.playbook = "/home/artem/vagrant/ansible/provision.yml"
+                                setup.become = true
+                                setup.extra_vars = { ansible_user: 'vagrant' }
+                        end
+                end
+        end
+end
+```
