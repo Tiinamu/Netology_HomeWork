@@ -11,6 +11,8 @@ artem@ubuntu:~/vagrant$ vagrant -v
 Vagrant 2.2.6
 ```
 
+
+
 __на Ubuntu установлен ansible__
 ```
 artem@ubuntu:~/vagrant$ ansible --version
@@ -111,7 +113,27 @@ artem@ubuntu:~/vagrant$ vagrant box list
 bento/ubuntu-20.04 (virtualbox, 202112.19.0)
 ```
 
-__Запускаем ВМ:__
+__Версия python:__
+```
+artem@ubuntu:~/vagrant/ansible$ python3 --version
+Python 3.8.10
 ```
 
+__Создаем файл /etc/vbox/networks.conf__
 ```
+* 10.0.0.0/8 192.168.0.0/16
+* 2001::/64
+```
+
+__Включаем VT-X для машины:__
+```
+VBoxManage modifyvm "server1.netology" --nested-hw-virt on
+```
+
+__Запускаем ВМ:__
+```
+vagrant up
+```
+
+__Далее возникает следующая ошибка:__
+
