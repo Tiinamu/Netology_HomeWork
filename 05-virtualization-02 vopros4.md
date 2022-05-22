@@ -77,9 +77,22 @@ Vagrant.configure(2) do |config|
 end
 ```
 
-__Содержание файла ansible.cfg__
+__Содержание файла /home/artem/vagrant/ansible/ansible.cfg__
+```
+[defaults]
+inventory=./inventory
+deprecation_warnings=False
+command_warnings=False
+ansible_port=22
+interpreter_python=/usr/bin/python3
 ```
 
+__Содержание файла /home/artem/vagrant/ansible/inventory__
+```
+[nodes:children]
+manager
+[manager]
+server1.netology ansible_host=127.0.0.1 ansible_port=20011 ansible_user=vagrant
 ```
 
 __Убеждаемся, что нет поднятых машин:__
