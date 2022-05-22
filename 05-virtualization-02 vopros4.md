@@ -34,7 +34,7 @@ drwxrwxr-x  4 artem artem 4,0K мая 20 23:38 .vagrant
 -rw-rw-r--  1 artem artem 1,2K мая 21 00:46 Vagrantfile
 ```
 
-Содержание файла Vagrantfile:
+__Содержание файла Vagrantfile:__
 ```
 ISO = "bento/ubuntu-20.04"
 NET = "192.168.192."
@@ -75,4 +75,30 @@ Vagrant.configure(2) do |config|
                 end
         end
 end
+```
+
+__Содержание файла ansible.cfg__
+```
+
+```
+
+__Убеждаемся, что нет поднятых машин:__
+```
+artem@ubuntu:~/vagrant$ vagrant global-status 
+id       name   provider state  directory                           
+--------------------------------------------------------------------
+There are no active Vagrant environments on this computer! Or,
+you haven't destroyed and recreated Vagrant environments that were
+started with an older version of Vagrant.
+```
+
+__Смотрим, какой образ ОС есть в box-е:__
+```
+artem@ubuntu:~/vagrant$ vagrant box list
+bento/ubuntu-20.04 (virtualbox, 202112.19.0)
+```
+
+__Запускаем ВМ:__
+```
+
 ```
