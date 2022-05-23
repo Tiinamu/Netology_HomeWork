@@ -158,24 +158,24 @@ example-dot-com
 
 *Создание сертификатов для devops.example.com:*
 ```
-root@vagrant:~# vault write -format=json pki_int/issue/example-dot-com common_name="devops.example.com" ttl=720h > devops.example.com.crt
+~ vault write -format=json pki_int/issue/example-dot-com common_name="devops.example.com" ttl=720h > devops.example.com.crt
 
-root@vagrant:~# cat devops.example.com.crt
+~ cat devops.example.com.crt
 ....
 "serial_number": "6f:9d:23:86:a8:3d:0d:e8:ac:cb:a3:c7:f6:b3:f9:0b:6a:51:6b:cf"
 
-root@vagrant:~# cat devops.example.com.crt | jq -r .data.certificate > devops.example.com.crt.pem
+~ cat devops.example.com.crt | jq -r .data.certificate > devops.example.com.crt.pem
 
-root@vagrant:~# cat devops.example.com.crt | jq -r .data.issuing_ca >> devops.example.com.crt.pem
+~ cat devops.example.com.crt | jq -r .data.issuing_ca >> devops.example.com.crt.pem
 
-root@vagrant:~# cat devops.example.com.crt | jq -r .data.private_key > dvops.example.com.crt.key
+~ cat devops.example.com.crt | jq -r .data.private_key > dvops.example.com.crt.key
 ```
 ________________________ 
 
 __5.  Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.__
 
-root@vagrant:~# ln -s /root/CA_cert.crt /usr/local/share/ca-certificates/CA_cert.crt
-root@vagrant:~# update-ca-certificates
+~ ln -s /root/CA_cert.crt /usr/local/share/ca-certificates/CA_cert.crt
+~ update-ca-certificates
 Updating certificates in /etc/ssl/certs...
 0 added, 0 removed; done.
 Running hooks in /etc/ca-certificates/update.d...
@@ -184,8 +184,8 @@ ________________________
 
 __6. Установите nginx.__
 
-root@vagrant:~# apt install nginx
-root@vagrant:~# systemctl status nginx
+~ apt install nginx
+~ systemctl status nginx
 
 ● nginx.service - A high performance web server and a reverse proxy server
      Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
@@ -247,11 +247,11 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 root@vagrant:~# systemctl reload nginx
 root@vagrant:~# root@vagrant:~# curl -I https://devops.example.com
 ```
-![k_1_17(pictures/k_1_17.JPG)
+![k_1_17](pictures/k_1_17.JPG)
 ________________________ 
 
 __8.  Откройте в браузере на хосте https адрес страницы, которую обслуживает сервер nginx.__
-![k_1_18(pictures/k_1_18.JPG)
+![k_1_18](pictures/k_1_18.JPG)
 ________________________ 
 
 __9.  Создайте скрипт, который будет генерировать новый сертификат в vault:
@@ -281,10 +281,10 @@ __10.  Поместите скрипт в crontab, чтобы сертифика
 0 0 7 * * /home/artem/script_sert.sh
 ```
 Для примера проставил выполнение скрипта «каждую минуту», чтобы отследить в логе его выполнение:
-![k_1_19(pictures/k_1_19.JPG)
+![k_1_19](pictures/k_1_19.JPG)
 
 Ниже скриншот лог файла /var/log/syslog:  
-![k_1_20(pictures/k_1_20.JPG)
+![k_1_20](pictures/k_1_20.JPG)
 ________________________ 
 
 
