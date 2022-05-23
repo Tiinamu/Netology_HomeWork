@@ -173,20 +173,21 @@ example-dot-com
 ________________________ 
 
 __5.  Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.__
-
+```
 ~ ln -s /root/CA_cert.crt /usr/local/share/ca-certificates/CA_cert.crt
 ~ update-ca-certificates
 Updating certificates in /etc/ssl/certs...
 0 added, 0 removed; done.
 Running hooks in /etc/ca-certificates/update.d...
 done.
+```
 ________________________ 
 
 __6. Установите nginx.__
-
+```
 ~ apt install nginx
 ~ systemctl status nginx
-
+```
 ● nginx.service - A high performance web server and a reverse proxy server
      Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
      Active: active (running) since Mon 2022-05-16 07:19:32 PDT; 38s ago
