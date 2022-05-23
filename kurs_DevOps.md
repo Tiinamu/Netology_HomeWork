@@ -188,6 +188,7 @@ __6. Установите nginx.__
 ~ apt install nginx
 ~ systemctl status nginx
 ```
+```
 ● nginx.service - A high performance web server and a reverse proxy server
      Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
      Active: active (running) since Mon 2022-05-16 07:19:32 PDT; 38s ago
@@ -202,7 +203,7 @@ __6. Установите nginx.__
 
 мая 16 07:19:32 ubuntu systemd[1]: Starting A high performance web server and a reverse proxy server...
 мая 16 07:19:32 ubuntu systemd[1]: Started A high performance web server and a reverse proxy server.
-
+```
 ![k_1_13](pictures/k_1_13.JPG)
 ```
 ~ nano /etc/hosts
