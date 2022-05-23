@@ -246,8 +246,8 @@ nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 ```
-root@vagrant:~# systemctl reload nginx
-root@vagrant:~# root@vagrant:~# curl -I https://devops.example.com
+~ systemctl reload nginx
+~ root@vagrant:~# curl -I https://devops.example.com
 ```
 ![k_1_17](pictures/k_1_17.JPG)
 ________________________ 
