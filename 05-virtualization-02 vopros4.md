@@ -24,7 +24,7 @@ ansible 2.9.6
   python version = 3.8.10 (default, Mar 15 2022, 12:22:08) [GCC 9.4.0]
 ```
 
-Создана папка vagrant в домашней директории, далее произведен *vagrant init* и добавлены файл ansible.cfg и папка ansible для хранения playbook-а :
+__Создана папка vagrant в домашней директории, далее произведен *vagrant init* и добавлены файл ansible.cfg и папка ansible для хранения playbook-а:__
 ```
 artem@ubuntu:~/vagrant$ ls -lha
 итого 40K
@@ -136,4 +136,4 @@ vagrant up
 ```
 
 __Далее возникает следующая ошибка:__
-
+![5_2_1](pictures/5_2_1.JPG)
