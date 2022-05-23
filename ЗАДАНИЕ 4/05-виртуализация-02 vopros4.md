@@ -148,4 +148,13 @@ __Структура директории "~/vagrant/ansible/":__
 
 *при этом отмечу, что файл ansible.cfg лежит как в /etc/ansible/ (по умолчанию), так и в ~/vagrant/ansible/ (скопировал сюда, как в лекции), но они одинаковые*
 
+Все файлы, а именно:
+```
+- ansible.cfg
+- inventory
+- provision
+- Vagrantfile
+```
+выложены здесь: https://github.com/Tiinamu/Netology_HomeWork/tree/main/ЗАДАНИЕ%204
 
+![5_2_4](../pictures/5_2_4.JPG)
