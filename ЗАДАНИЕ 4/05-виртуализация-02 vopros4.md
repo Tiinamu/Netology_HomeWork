@@ -1,19 +1,16 @@
 ## В ходе выполнения задания 4* в 5-2  было выполнено следующее:
 
-__на Ubuntu установлен virtualbox__
+__на Ubuntu установил virtualbox__
 ```
 artem@ubuntu:~/vagrant$ vboxmanage --version
 6.1.32_Ubuntur149290
 ```
-__на Ubuntu установлен vagrant__
+__на Ubuntu установил vagrant__
 ```
 artem@ubuntu:~/vagrant$ vagrant -v
 Vagrant 2.2.6
 ```
-
-
-
-__на Ubuntu установлен ansible__
+__на Ubuntu установил ansible__
 ```
 artem@ubuntu:~/vagrant$ ansible --version
 ansible 2.9.6
@@ -24,7 +21,7 @@ ansible 2.9.6
   python version = 3.8.10 (default, Mar 15 2022, 12:22:08) [GCC 9.4.0]
 ```
 
-__Создана папка vagrant в домашней директории, далее произведен *vagrant init* и добавлены файл ansible.cfg и папка ansible для хранения playbook-а:__
+__Создал папку vagrant в домашней директории, далее произведен *vagrant init* и добавлены файл ansible.cfg и папка ansible для хранения playbook-а:__
 ```
 artem@ubuntu:~/vagrant$ ls -lha
 итого 40K
