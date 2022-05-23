@@ -61,11 +61,11 @@ sudo nano /etc/vault.d/vault.hcl
 
 Далее перезапускаем службу vault:
 ```
-artem@ubuntu:~$ systemctl restart vault
+~ systemctl restart vault
 ```
 и обновляем системную переменную VAULT_ADDR:
 ```
-artem@ubuntu:~$ export VAULT_ADDR=http://127.0.0.1:8200
+~ export VAULT_ADDR=http://127.0.0.1:8200
 ```
 
 Выводим на экран статус:
@@ -75,7 +75,7 @@ artem@ubuntu:~$ export VAULT_ADDR=http://127.0.0.1:8200
 ```
 vault operator init
 
-artem@ubuntu:~$ vault operator init
+~ vault operator init
 Unseal Key 1: mXmqLSOq8EVZu/7Hqbyza/YTOFaVukjU2sTdjhRrG+AF
 Unseal Key 2: 5F7fSROwIZGibgVjPoP2HOGgyvhwOlLt8Hdz4KSqvMWp
 Unseal Key 3: oLEF5F5pUqElVQjI/tOG270aOHeKBICovSGQpfCW1gkH
