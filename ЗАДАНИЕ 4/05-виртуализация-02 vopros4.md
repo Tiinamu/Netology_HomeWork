@@ -152,7 +152,7 @@ __Структура директории "~/vagrant/ansible/":__
 ```
 - ansible.cfg
 - inventory
-- provision
+- provision.yml
 - Vagrantfile
 ```
 выложены здесь: https://github.com/Tiinamu/Netology_HomeWork/tree/main/ЗАДАНИЕ%204
