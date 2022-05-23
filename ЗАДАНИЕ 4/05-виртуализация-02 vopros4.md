@@ -136,5 +136,5 @@ vagrant up
 ```
 
 __Далее возникает следующая ошибка:__
-![5_2_1](Netology_HomeWork/pictures/5_2_1.JPG)
+![5_2_1](../pictures/5_2_1.JPG)
 
