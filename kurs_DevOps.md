@@ -278,6 +278,9 @@ ________________________
 __10.  Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.__
 ```
 ~ crontab -l
+...
+VAULT_TOKEN=root
+VAULT_ADDR=http://127.0.0.1:8200
 ....
 # m h  dom mon dow   command
 0 0 7 * * /home/artem/script_sert.sh
