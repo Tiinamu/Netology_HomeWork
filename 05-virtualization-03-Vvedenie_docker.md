@@ -61,7 +61,7 @@ RUN echo \
 ```
 ~$ docker push tiinamu/netology-docker-rep:5.3
 ```
-*6)	Ссылка на репозиторий с образом: https://hub.docker.com/repository/docker/tiinamu/netology-docker-rep *
+*6)	Ссылка на репозиторий с образом: https://hub.docker.com/repository/docker/tiinamu/netology-docker-rep*
 
 *7)	Запускаем контейнер с пробросом на 80 порт хоста:*
 ```
