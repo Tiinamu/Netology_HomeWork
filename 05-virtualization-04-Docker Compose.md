@@ -182,6 +182,7 @@ artem@ubuntu:~/Netology_5-4_Compose/terraform$ terraform apply -auto-approve
 ![5_4_25](pictures/5_4_25.JPG)
 
 Смотрим в UI как создалась машина:
+
 ![5_4_26](pictures/5_4_26.JPG)
 _____________________________________
 
@@ -247,6 +248,8 @@ artem@ubuntu:~/Netology_5-4_Compose/terraform$ terraform destroy
 yc compute image delete -–id fd84756mb8sn06j43dpj
 ```
 ![5_4_38](pictures/5_4_38.JPG)
+_____________________________________
+
 
 
 
