@@ -17,7 +17,7 @@ artem@ubuntu:~$ cd Netology_5-4_Compose/
 artem@ubuntu:~/Netology_5-4_Compose$ yc init
 ```
 вводим токен AQAAAAAN_tZ5AATuwSsx5JrfJUgGr8kj0SbPdKY 
-(со страницы https://oauth.yandex.ru/verification_code#access_token=AQAAAAAN_tZ5AATuwSsx5JrfJUgGr8kj0SbPdKY&token_type=bearer&expires_in=31229311))
+(со страницы https://oauth.yandex.ru/verification_code#access_token=AQAAAAAN_tZ5AATuwSsx5JrfJUgGr8kj0SbPdKY&token_type=bearer&expires_in=31229311)
 
 ```
 yc init:
