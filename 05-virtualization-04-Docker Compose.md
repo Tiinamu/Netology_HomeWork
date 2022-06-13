@@ -6,7 +6,7 @@ __Создать собственный образ операционной си
 
 __Решение__
 
-__*1). Ставим, настриваем yc__
+*__1). Ставим, настриваем yc__*
 ```
 artem@ubuntu:~$ curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 ```
@@ -47,7 +47,7 @@ v4_cidr_blocks:
 Проверяем, что создались подсети:
 ![5_4_4](pictures/5_4_4.JPG)
 
-__*2). Ставим Packer версии 1.8.1__*
+*__2). Ставим Packer версии 1.8.1__*
 ```
 artem@ubuntu:/$ export VER="1.8.1"
 artem@ubuntu:/$ sudo wget https://releases.hashicorp.com/packer/${VER}/packer_${VER}_linux_amd64.zip 
@@ -110,10 +110,11 @@ artem@ubuntu:~/Netology_5-4_Compose$ yc iam service-account create --name my-rob
 ![5_4_14](pictures/5_4_14.JPG)
 
 Теперь надо назначить роль editor этому сервисному аккаунту, а для этого выяснить id сервисного аккаунта:
+```
 yc resource-manager folder add-access-binding netology-tiinamu-new \
   --role editor \
   --subject serviceAccount:aje10prv6nj8qjr5roku
-
+```
 ![5_4_15](pictures/5_4_15.JPG)
 
 Проверяем сервисные роли и их права:
@@ -167,8 +168,85 @@ terraform validate:
 ```
 ![5_4_22](pictures/5_4_22.JPG)
 
+Затем говорим terraform plan, чтобы посмотреть, что terraform собирается нам создать
+```
+artem@ubuntu:~/Netology_5-4_Compose/terraform$ terraform plan
+```
+![5_4_23](pictures/5_4_23.JPG)
+![5_4_24](pictures/5_4_24.JPG)
 
+Далее
+```
+artem@ubuntu:~/Netology_5-4_Compose/terraform$ terraform apply -auto-approve
+```
+![5_4_25](pictures/5_4_25.JPG)
 
+Смотрим в UI как создалась машина:
+![5_4_26](pictures/5_4_26.JPG)
+_____________________________________
+
+__3.	Задача 3__
+
+__Создать ваш первый готовый к боевой эксплуатации компонент мониторинга, состоящий из стека микросервисов.__
+
+__Решение__
+
+Идем в директорию ansible, подставляем внешний ip в inventory-файл:
+![5_4_27](pictures/5_4_27.JPG)
+
+Сгенерим ключи в директории *.ssh*:
+```
+artem@ubuntu:~/.ssh$ ssh-keygen -t rsa
+```
+![5_4_28](pictures/5_4_28.JPG)
+
+Запускаем playbook:
+```
+artem@ubuntu:~/Netology_5-4_Compose/ansible$ ansible-playbook provision.yml
+```
+![5_4_29](pictures/5_4_29.JPG)
+
+Можем зайти на виртуалку и проверим, что собрал docker:
+```
+docker images
+```
+![5_4_30](pictures/5_4_30.JPG)
+
+Проверим, какие микросервисы запустились:
+![5_4_31](pictures/5_4_31.JPG)
+
+Посмотрим через docker-compose на микросервисы в табличном виде (с портами):
+![5_4_32](pictures/5_4_32.JPG)
+
+Посмотрим через ctop:
+```
+[root@node01 stack]# yum install wget –y
+[root@node01 stack]# sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.7/ctop-0.7.7-linux-amd64 -O /usr/local/bin/ctop
+[root@node01 stack]# sudo chmod +x /usr/local/bin/ctop
+[root@node01 stack]# /usr/local/bin/ctop
+```
+![5_4_33](pictures/5_4_33.JPG)
+
+Заходим по порту 3000 на внешний ip
+```
+http://51.250.90.228:3000/
+```
+![5_4_34](pictures/5_4_34.JPG)
+![5_4_35](pictures/5_4_35.JPG)
+![5_4_36](pictures/5_4_36.JPG)
+
+Удаляем виртуалку с облака(последовательно удалятся машина, подсеть, сеть):
+```
+
+artem@ubuntu:~/Netology_5-4_Compose/terraform$ terraform destroy
+```
+![5_4_37](pictures/5_4_37.JPG)
+
+Удаляем образ с облака:
+```
+yc compute image delete -–id fd84756mb8sn06j43dpj
+```
+![5_4_38](pictures/5_4_38.JPG)
 
 
 
