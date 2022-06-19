@@ -300,6 +300,7 @@ __4.5.	Затем говорим terraform plan, чтобы посмотреть
 artem@ubuntu:~/Netology_5-5_Swarm/terraform$ terraform plan
 ```
 ![5_5_22](pictures/5_5_22.JPG) 
+
 .................
 
 Видим, что terraform запланировал создание 13-ти сущностей:
