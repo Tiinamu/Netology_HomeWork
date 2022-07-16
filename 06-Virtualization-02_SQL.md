@@ -75,7 +75,7 @@ artem@ubuntu:~/Netology_6_2_SQL$ sudo docker ps
 
 Проверим, что можем зайти в контейнер с postgres
 ```
-artem@ubuntu:~/Netology_6_2_SQL$ sudo docker exec -it pg_db bash
+artem@ubuntu:~/Netology_6_2_SQL$ sudo docker exec -it pg_db_new bash
 ```
 ![6_2_3](pictures/6_2_3.JPG) 
 
@@ -106,10 +106,11 @@ __•	создайте пользователя test-simple-user__
 
 __•	предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db__
 
-*__Таблица orders:*__
-•	id (serial primary key)
-•	наименование (string)
-•	цена (integer)
+__*Таблица orders:*__
+
+__•	id (serial primary key)__
+__•	наименование (string)__
+__•	цена (integer)__
 
 *__Таблица clients:*__
 •	id (serial primary key)
