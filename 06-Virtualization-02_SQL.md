@@ -108,23 +108,110 @@ __•	предоставьте пользователю test-simple-user пра�
 
 __*Таблица orders:*__
 
-__+•	id (serial primary key)__
-__+•	наименование (string)__
-__+•	цена (integer)__
-
-*__Таблица clients:*__
 •	id (serial primary key)
+
+•	наименование (string)
+
+•	цена (integer)
+
+__*Таблица clients:*__
+
+•	id (serial primary key)
+
 •	фамилия (string)
+
 •	страна проживания (string, index)
+
 •	заказ (foreign key orders)
 
-__Приведите:
-•	итоговый список БД после выполнения пунктов выше,
-•	описание таблиц (describe)
-•	SQL-запрос для выдачи списка пользователей с правами над таблицами test_db
-•	список пользователей с правами над таблицами test_db__
+__Приведите:__
+
+__•	итоговый список БД после выполнения пунктов выше__
+
+__•	описание таблиц (describe)__
+
+__•	SQL-запрос для выдачи списка пользователей с правами над таблицами test_db__
+
+__•	список пользователей с правами над таблицами test_db__
+
 
 __Решение:__
+
+2.1)	создадим БД test_db (createdb) и выполним подключение (psql) к созданной базе:
+```
+artem@ubuntu:~/Netology_6_2_SQL$ sudo docker exec -it pg_db_new bash
+root@7dffed4502c4:/# 
+root@7dffed4502c4:/# createdb test_db -U bantserev
+root@7dffed4502c4:/#
+root@7dffed4502c4:/# psql -d test_db -U bantserev
+psql (12.11 (Debian 12.11-1.pgdg110+1))
+Type "help" for help.
+test_db=#
+```
+![6_2_6](pictures/6_2_6.JPG) 
+
+В графическом интерфейсе pgAdmin также видим, что БД создалась (подключение через браузер http://localhost:5050):
+![6_2_7](pictures/6_2_7.JPG) 
+
+2.2)	создадим пользователя test-admin-user:
+```
+test_db=# CREATE USER test_admin_user;
+CREATE ROLE
+```
+2.3)	в БД test_db создадим таблицы orders и clients:
+```
+test_db=# CREATE TABLE orders
+(
+   id SERIAL PRIMARY KEY,
+   наименование TEXT,
+   цена INTEGER
+);
+CREATE TABLE
+
+test_db=# CREATE TABLE clients
+(
+    id SERIAL PRIMARY KEY,
+    фамилия TEXT,
+    страна_проживания TEXT,
+    заказ INTEGER,
+    FOREIGN KEY (заказ) REFERENCES orders(id)
+);
+```
+2.4)	предоставим привилегии на все операции пользователю test-admin-user на таблицы БД test_db:
+```
+test_db=# GRANT ALL ON TABLE orders TO test_admin_user;
+GRANT
+test_db=# GRANT ALL ON TABLE clients TO test_admin_user;
+GRANT
+```
+2.5)	создадим пользователя test-simple-user:
+```
+test_db=# CREATE USER test_simple_user;
+CREATE ROLE
+```
+2.6)	предоставим пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db:
+test_db=# GRANT SELECT,INSERT,UPDATE,DELETE ON TABLE orders TO test_simple_user;
+GRANT
+test_db=# GRANT SELECT,INSERT,UPDATE,DELETE ON TABLE clients TO test_simple_user;
+GRANT
+```
+2.7)	итоговый список БД после выполнения пунктов выше: 
+![6_2_8](pictures/6_2_8.JPG) 
+
+2.8)	описание таблиц (describe):
+![6_2_9](pictures/6_2_9.JPG) 
+
+2.9)	SQL-запрос для выдачи списка пользователей с правами над таблицами test_db:
+```
+test_db=# SELECT grantee, table_catalog, table_name, privilege_type FROM information_schema.table_privileges WHERE table_name IN ('orders','clients');
+```
+2.10)	список пользователей с правами над таблицами test_db: 
+![6_2_10](pictures/6_2_10.JPG) 
+
+__3.	Задача 3__
+
+Используя SQL синтаксис - наполните таблицы следующими тестовыми данными:
+Таблица orders: 
 
 
 
