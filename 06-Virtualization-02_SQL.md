@@ -177,6 +177,7 @@ test_db=# CREATE TABLE clients
     FOREIGN KEY (заказ) REFERENCES orders(id)
 );
 ```
+
 2.4)	предоставим привилегии на все операции пользователю test-admin-user на таблицы БД test_db:
 ```
 test_db=# GRANT ALL ON TABLE orders TO test_admin_user;
@@ -184,17 +185,21 @@ GRANT
 test_db=# GRANT ALL ON TABLE clients TO test_admin_user;
 GRANT
 ```
+
 2.5)	создадим пользователя test-simple-user:
 ```
 test_db=# CREATE USER test_simple_user;
 CREATE ROLE
 ```
-2.6)	предоставим пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db:
+
+2.6)	предоставим пользователю *test-simple-user* права на *SELECT/INSERT/UPDATE/DELETE* данных таблиц БД *test_db*:
+```
 test_db=# GRANT SELECT,INSERT,UPDATE,DELETE ON TABLE orders TO test_simple_user;
 GRANT
 test_db=# GRANT SELECT,INSERT,UPDATE,DELETE ON TABLE clients TO test_simple_user;
 GRANT
 ```
+
 2.7)	итоговый список БД после выполнения пунктов выше: 
 ![6_2_8](pictures/6_2_8.JPG) 
 
@@ -205,6 +210,7 @@ GRANT
 ```
 test_db=# SELECT grantee, table_catalog, table_name, privilege_type FROM information_schema.table_privileges WHERE table_name IN ('orders','clients');
 ```
+
 2.10)	список пользователей с правами над таблицами test_db: 
 ![6_2_10](pictures/6_2_10.JPG) 
 
