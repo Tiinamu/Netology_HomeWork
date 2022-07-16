@@ -10,8 +10,8 @@ __Используя docker поднимите инстанс PostgreSQL (вер
 
 __Решение:__
 
-Создадим каталог для проекта ~/Netology_6_2_SQL
-Создадим docker-compose.yml – файл:
+Создадим каталог для проекта *~/Netology_6_2_SQL*
+Создадим *docker-compose.yml* – файл:
 ```
 version: '3'
 services:
@@ -65,6 +65,66 @@ volumes:
 ```
 artem@ubuntu:~/Netology_6_2_SQL$ sudo docker-compose up
 ```
+![6_2_1](pictures/6_2_1.JPG) 
+
+Проверяем, какие контейнеры запустились:
+```
+artem@ubuntu:~/Netology_6_2_SQL$ sudo docker ps
+```
+![6_2_2](pictures/6_2_2.JPG)
+
+Проверим, что можем зайти в контейнер с postgres
+```
+artem@ubuntu:~/Netology_6_2_SQL$ sudo docker exec -it pg_db bash
+```
+![6_2_3](pictures/6_2_3.JPG) 
+
+Проверим, что можем зайти в контейнер с *pgAdmin4*
+```
+artem@ubuntu:~/Netology_6_2_SQL$ sudo docker exec -it pgadmin /bin/sh
+```
+![6_2_4](pictures/6_2_4.JPG) 
+
+Далее проверим окружение, пароли, логины внутри второго контейнера (пароль потом поменял, как в манифесте)
+```
+/pgadmin4 $  printenv
+```
+![6_2_5](pictures/6_2_5.JPG) 
+________________________________________
+
+__2.	Задача 2__
+
+__В БД из задачи 1:__
+
+__•	создайте пользователя test-admin-user и БД test_db__
+
+__•	в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже)__
+
+__•	предоставьте привилегии на все операции пользователю test-admin-user на таблицы БД test_db__
+
+__•	создайте пользователя test-simple-user__
+
+__•	предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db__
+
+*__Таблица orders:*__
+•	id (serial primary key)
+•	наименование (string)
+•	цена (integer)
+
+*__Таблица clients:*__
+•	id (serial primary key)
+•	фамилия (string)
+•	страна проживания (string, index)
+•	заказ (foreign key orders)
+
+__Приведите:
+•	итоговый список БД после выполнения пунктов выше,
+•	описание таблиц (describe)
+•	SQL-запрос для выдачи списка пользователей с правами над таблицами test_db
+•	список пользователей с правами над таблицами test_db__
+
+__Решение:__
+
 
 
 |     Типы сущностей, которые нужно будет хранить в БД       |       Подходящие типы СУБД для каждой сущности        |
