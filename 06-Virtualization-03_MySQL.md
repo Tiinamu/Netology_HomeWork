@@ -254,6 +254,171 @@ mysql> SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES WHERE USER = 'test';
 ![6_3_8](pictures/6_3_8.JPG)
 ________________________________________
 
+__3.	Задача 3__
 
+__Установите профилирование SET profiling = 1. Изучите вывод профилирования команд SHOW PROFILES;.
+Исследуйте, какой engine используется в таблице БД test_db и приведите в ответе.
+Измените engine и приведите время выполнения и запрос на изменения из профайлера в ответе:__
 
+__•	на MyISAM__
+__•	на InnoDB__
+
+__Решение:__
+
+3.1)	Установим профилирование:
+```
+mysql> SET profiling=1;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+```
+
+3.2)	Вывод команды *SHOW PROFILES;* покажет длительности выполнения запросов:
+```
+mysql> SHOW PROFILES;
+```
+![6_3_9](pictures/6_3_9.JPG)
+
+3.3)	Исследуем, какой *Engine* используется в *my_db_mysql*:
+
+*Способ 1:*
+```
+mysql> SHOW TABLE STATUS FROM my_db_mysql;
+```
+![6_3_10](pictures/6_3_10.JPG)
+
+*Способ 2:*
+```
+mysql> SELECT table_schema,table_name,engine FROM information_schema.tables WHERE table_schema = DATABASE();
+```
+![6_3_11](pictures/6_3_11.JPG)
+
+В таблице orders БД my_db_mysql используется Engine InnoDB:
+
+3.4)	Изменим *Engine*:
+
+- Меняем движок на *MyISAM*
+```
+mysql> ALTER TABLE orders ENGINE = InnoDB;
+```
+![6_3_12](pictures/6_3_12.JPG)
+
+- Меняем движок на *InnoDB*:
+```
+mysql> ALTER TABLE orders ENGINE = InnoDB;
+```
+![6_3_13](pictures/6_3_13.JPG)
+
+3.5)	Смотрим время выполнения запросов через *PROFILES*:
+```
+mysql> SHOW PROFILES;
+```
+![6_3_14](pictures/6_3_14.JPG)
+
+4.	Задача 4
+
+__Изучите файл my.cnf в директории /etc/mysql.__
+
+__Измените его согласно ТЗ (движок InnoDB):__
+
+__-	Скорость IO важнее сохранности данных__
+
+__-	Нужна компрессия таблиц для экономии места на диске__
+
+__-	Размер буффера с незакомиченными транзакциями 1 Мб__
+
+__-	Буффер кеширования 30% от ОЗУ__
+
+__-	Размер файла логов операций 100 Мб__
+
+__Приведите в ответе измененный файл my.cnf.__
+ 
+__Решение:__
+
+4.1)	Содержание файла my.cnf:
+```
+bash-4.4# cat my.cnf
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/8.0/en/server-configuration-defaults.html
+
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+
+# Remove leading # to revert to previous value for default_authentication_plugin,
+# this will increase compatibility with older clients. For background, see:
+# https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_default_authentication_plugin
+# default-authentication-plugin=mysql_native_password
+skip-host-cache
+skip-name-resolve
+datadir=/var/lib/mysql
+socket=/var/run/mysqld/mysqld.sock
+secure-file-priv=/var/lib/mysql-files
+user=mysql
+
+pid-file=/var/run/mysqld/mysqld.pid
+[client]
+socket=/var/run/mysqld/mysqld.sock
+
+!includedir /etc/mysql/conf.d/
+bash-4.4#
+```
+4.2)	Измененный файл my.cnf.
+```
+bash-4.4# cat my.cnf
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/8.0/en/server-configuration-defaults.html
+
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+
+# Remove leading # to revert to previous value for default_authentication_plugin,
+# this will increase compatibility with older clients. For background, see:
+# https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_default_authentication_plugin
+# default-authentication-plugin=mysql_native_password
+skip-host-cache
+skip-name-resolve
+datadir=/var/lib/mysql
+socket=/var/run/mysqld/mysqld.sock
+secure-file-priv=/var/lib/mysql-files
+user=mysql
+
+pid-file=/var/run/mysqld/mysqld.pid
+[client]
+socket=/var/run/mysqld/mysqld.sock
+
+!includedir /etc/mysql/conf.d/
+
+# Системные переменные InnoDB
+innodb_flush_log_at_trx_commit = 0
+innodb_file_per_table = ON
+innodb_log_buffer_size= 1M
+innodb_buffer_pool_size = 1G
+max_binlog_size= 100M
+```
 
