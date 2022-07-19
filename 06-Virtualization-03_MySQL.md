@@ -91,13 +91,18 @@ artem@ubuntu:~/Netology_6_3_MySQL$ sudo docker cp test_dump.sql mysql_db:/backup
 Проверим, что бэкап записался в папку проекта:
 ![6_3_1](pictures/6_3_1.JPG) 
 
-1.5)	Зайдем в управляющий интерфейс *mysql*:
+1.5)	Восстанавливаем дамп:
+```
+bash-4.4# mysql -u bantserev -p mysql_db < /backup/test_dump.sql
+```
+
+1.6)	Зайдем в управляющий интерфейс *mysql*:
 ```
 bash-4.4# mysql -h 127.0.0.1 -u root –p
 ```
 ![6_3_2](pictures/6_3_2.JPG) 
 
-1.6)	Используя команду *\h* получаем список управляющих команд.
+1.7)	Используя команду *\h* получаем список управляющих команд.
 ```
 mysql> \h
 
@@ -143,7 +148,7 @@ For server side help, type 'help contents'
 mysql>
 ```
 
-1.7)	Проверим версию сервера БД
+1.8)	Проверим версию сервера БД
 ```
 mysql> \s
 --------------
@@ -173,30 +178,30 @@ Threads: 2  Questions: 10  Slow queries: 0  Opens: 118  Flush tables: 3  Open ta
 mysql>
 ```
 
-1.8)	Посмотрим все БД в инстансе 
+1.9)	Посмотрим все БД в инстансе 
 ```
 mysql> show databases;
 ```
 ![6_3_3](pictures/6_3_3.JPG)
 
-1.9)	Подключимся к восстановленной БД *my_db_mysql*
+1.10)	Подключимся к восстановленной БД *my_db_mysql*
 ```
 mysql> use my_db_mysql
 ```
 
-1.10)	Получим писок таблиц из этой БД
+1.11)	Получим писок таблиц из этой БД
 ```
 mysql> SHOW TABLES;
 ```
 ![6_3_4](pictures/6_3_4.JPG)
 
-1.11)	Получим записи с *price>300*
+1.12)	Получим записи с *price>300*
 ```
 mysql> SELECT * FROM orders WHERE price > 300;
 ```
 ![6_3_5](pictures/6_3_5.JPG)
 
-1.12)	Получим количество записей с *price > 300*
+1.13)	Получим количество записей с *price > 300*
 ```
 mysql> SELECT count(*) FROM orders WHERE price > 300;
 ```
