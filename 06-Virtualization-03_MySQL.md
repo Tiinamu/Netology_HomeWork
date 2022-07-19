@@ -313,7 +313,7 @@ mysql> SHOW PROFILES;
 ```
 ![6_3_14](pictures/6_3_14.JPG)
 
-4.	Задача 4
+__4.	Задача 4__
 
 __Изучите файл my.cnf в директории /etc/mysql.__
 
