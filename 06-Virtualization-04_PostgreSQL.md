@@ -340,9 +340,11 @@ INSERT INTO orders_2 SELECT * FROM orders WHERE price <=499;
 DELETE FROM orders WHERE price <=499;
 ```
 Проверим таблицу orders_1:
+
 ![6_4_3](pictures/6_4_3.JPG)
 
 Проверим таблицу orders_2:
+
 ![6_4_4](pictures/6_4_4.JPG)
 
 Исключить "ручное" разбиение при проектировании таблицы orders можно было, если делать её партиционированной.
