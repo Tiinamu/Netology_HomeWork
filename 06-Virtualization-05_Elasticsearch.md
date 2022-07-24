@@ -113,7 +113,7 @@ CMD ["sh", "-c", "${ES_HOME}/bin/elasticsearch"]
 Ссылка на репозиторий: https://hub.docker.com/repository/docker/tiinamu/elasticsearch
 ![6_5_2](pictures/6_5_2.JPG)
 
-1.5)	Запускаем контейнер (контейнер – запущенный экземпляр образа):
+1.5)	Запускаем контейнер:
 ```
 artem@ubuntu:~/Netology_6_5_Elasticsearch$ sudo docker run --rm -d --name elasticsearch_container -p 9200:9200 -p 9300:9300 tiinamu/elasticsearch:7.17.0
 ```
@@ -283,7 +283,7 @@ artem@ubuntu:~/Netology_6_5_Elasticsearch$ curl -X PUT localhost:9200/_snapshot/
 $ curl -X GET localhost:9200/_snapshot/netology_backup?pretty
 ```
 ![6_5_11](pictures/6_5_11.JPG)
-```
+
 3.3)	Используя метод *PUT*, создадим индекс *test* с 0 реплик и 1 шардом:
 ```
 $ curl -X PUT localhost:9200/test?pretty -H 'Content-Type: application/json' -d'
