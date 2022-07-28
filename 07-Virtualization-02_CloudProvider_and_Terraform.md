@@ -32,21 +32,25 @@ __1.	Задача 1 (Вариант с Yandex.Cloud). Регистрация в 
 4)	Воспользуйтесь инструкцией на сайте терраформа, что бы не указывать авторизационный токен в коде, а терраформ провайдер брал его из переменных окружений.
 
 __Решение:__
+
 1.1)	Регистрация была выполнена в рамках ДЗ 5-4. 
 1.2)	Проверим вывод команды yc config list
-
+```
 artem@ubuntu:~$ yc config list
 token: AQAAAAAN_tZ5AATuwSsx5JrfJUgGr8kj0SbPdKY
 cloud-id: b1g4u3sfpchj6i21hp7f
 folder-id: b1gjl0488dbj7totafg8
 compute-default-zone: ru-central1-a
+```
 
 Проверим версию:
+```
 artem@ubuntu:~$ yc -v
 Yandex Cloud CLI 0.91.0 linux/amd64
+```
 
 1.3)	Что бы не указывать авторизационный токен в коде, а терраформ провайдер брал его из переменных окружений, используем переменную окружения
-
+```
 artem@ubuntu:~$ export IAM_TOKEN=`yc iam create-token`
 artem@ubuntu:~$ curl -H "Authorization: Bearer ${IAM_TOKEN}" \
 >   https://resource-manager.api.cloud.yandex.net/resource-manager/v1/clouds
@@ -60,13 +64,18 @@ artem@ubuntu:~$ curl -H "Authorization: Bearer ${IAM_TOKEN}" \
   }
  ]
 }
+```
 
 1.4)	Проверим:
-
+```
 artem@ubuntu:~$ echo $IAM_TOKEN
 t1.9euelZqTj5uJkJSekJPGys_GnY6dj-3rnpWajZ6dko2Kxs2TmYnNyJrGx8_l9PdLfnlo-e94F0Pf3fT3Cy13aPnveBdD3w.MiCw_MppuLv1xHWuwIO6L0GRkHfV8BrwtaxRWiG11lvojv6PO8SCnk3jK_S61YB0poTP9nVDUjepKov4X-KiDA
 artem@ubuntu:~$
-2.	Задача 2. Создание aws ec2 или yandex_compute_instance через терраформ.
+```
+_________________________________
+
+__2.	Задача 2. Создание aws ec2 или yandex_compute_instance через терраформ.__
+
 1)	В каталоге terraform вашего основного репозитория, который был создан в начале курсе, создайте файл main.tf и versions.tf.
 2)	Зарегистрируйте провайдер
 i.	для aws. В файл main.tf добавьте блок provider, а в versions.tf блок terraform с вложенным блоком required_providers. Укажите любой выбранный вами регион внутри блока provider.
@@ -85,20 +94,28 @@ ii.	В файл outputs.tf поместить блоки output с данным�
 	Приватный IP ec2 инстансы,
 	Идентификатор подсети в которой создан инстанс.
 7)	Если вы выполнили первый пункт, то добейтесь того, что бы команда terraform plan выполнялась без ошибок.
-В качестве результата задания предоставьте:
+
+__В качестве результата задания предоставьте:__
+
 1.	Ответ на вопрос: при помощи какого инструмента (из разобранных на прошлом занятии) можно создать свой образ ami?
 2.	Ссылку на репозиторий с исходной конфигурацией терраформа.
-2.1)	Подготовим новую директорию проекта:
 
+__Решение:__
+
+2.1)	Подготовим новую директорию проекта:
+```
 artem@ubuntu:~/Netology_5-4_Compose sudo -R cp . ~/Netology_7_2_CloudProvider_and_Terraform/ 
 Далее работаем в папке проекта ~/Netology_7_2_CloudProvider_and_Terraform
-2.2)	Удаляем настройки предыдущих провайдеров:
+```
 
+2.2)	Удаляем настройки предыдущих провайдеров:
+```
 rm -rf .terraform*
 rm provider.tf
+```
 
 2.3)	Создаем файл main.tf
-
+```
 provider "yandex" {
   cloud_id  = "b1g4u3sfpchj6i21hp7f"
   folder_id = "b1gjl0488dbj7totafg8"
@@ -140,9 +157,10 @@ resource "yandex_compute_instance" "virtual_ya" {
   }
 
 }
+```
 
 2.4)	Создаем файл versions.tf
-
+```
 terraform {
   required_providers {
     yandex = {
@@ -151,9 +169,10 @@ terraform {
   }
   required_version = ">=0.13"
 }
+```
 
 2.5)	Проводим инициализацию: terraform init – терраформ скачает все зависимости для него:
-
+```
 artem@ubuntu:~/Netology_7_2_CloudProvider_and_Terraform/terraform$ terraform init
 
 Initializing the backend...
@@ -171,14 +190,16 @@ should now work.
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
+```
 
 2.6)	Далее надо провести валидацию конфига terraform:
-
+```
 artem@ubuntu:~/Netology_7_2_CloudProvider_and_Terraform/terraform$ terraform validate
 Success! The configuration is valid.
+```
 
 2.7)	Посмотрим, что terraform нам создаст через plan:
-
+```
 artem@ubuntu:~/Netology_7_2_CloudProvider_and_Terraform/terraform$ sudo terraform plan
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
@@ -305,13 +326,10 @@ Plan: 4 to add, 0 to change, 0 to destroy.
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you
 run "terraform apply" now.
 artem@ubuntu:~/Netology_7_2_CloudProvider_and_Terraform/terraform$
+```
 
 2.8)	Ошибок при выполнении terraform plan – нет.
 
 2.9)	Создать образ ami можно с помощью Packer
 
 2.10)	Исходная конфигурация terraform-файлов приведена выше.
-
-
-
-![7_1_1](pictures/7_1_1.JPG) 
