@@ -21,7 +21,7 @@ o	IAMFullAccess
 6)	export AWS_ACCESS_KEY_ID=(your access key id)
 7)	export AWS_SECRET_ACCESS_KEY=(your secret access key)
 8)	Создайте, остановите и удалите ec2 инстанс (любой с пометкой free tier) через веб интерфейс.
-
+ 
 __В виде результата задания приложите вывод команды aws configure list.__
 
 __1.	Задача 1 (Вариант с Yandex.Cloud). Регистрация в ЯО и знакомство с основами (необязательно, но крайне желательно).__
