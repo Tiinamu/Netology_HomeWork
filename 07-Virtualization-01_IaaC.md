@@ -83,10 +83,15 @@ __Решение:__
 1.5)	Какие инструменты из уже используемых вы хотели бы использовать для нового проекта?
 
 •	Packer — для создания образов;
+
 •	Terraform - для инициализации ресурсов;
+
 •	Ansible - для управления конфигурацией;
+
 •	Docker - в качестве системы контейнеризации для проекта;
+
 •	Kubernetes - среда для работы контейнеров;
+
 •	Gitlab CI/CD - для автоматизации процессов, CI/CD;
 
 1.6)	Хотите ли рассмотреть возможность внедрения новых инструментов для этого проекта?
@@ -99,12 +104,83 @@ __Решение:__
 - Сразу ли будем тестировать в облачной инфрсатруктуре, чтобы там обкатать продаваемый сервис, понять, сколько ресурсов ему требуется, чтобы потом принять решение, как выгоднее провести масштабирование на остальных клиентов – оставить в облаке или в собственном ЦОДе развернуть платформу виртуализации?
 - Какого обслачного провайдера выберем? Сколько у нас денег на OPEX на предпроект?
 - Также поднял бы вопрос о мониторинге – насколько критичен простой сервиса для бизнеса клиента. К началу внедрения и поддержки надо реализовать мониторинг, требуется выбрать
+_________________________________
 
+__2.	Задача 2. Установка терраформ.__
 
+__Официальный сайт: https://www.terraform.io/__
 
+__Установите терраформ при помощи менеджера пакетов используемого в вашей операционной системе. В виде результата этой задачи приложите вывод команды  terraform --version.__
 
+__Решение: __
 
+Установим Terraform из официального репозитория. Выполним команду в оболочке терминала, чтобы добавить ключ GPG для Terraform в нашу систему:
+```
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+```
+Затем выполняем команду, чтобы загрузить Terraform с веб-сайта Hashicorp:
+```
+sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+```
+После добавления репозитория устанавливаем Terraform, выполнив следующую команду:
+```
+sudo apt update
+sudo apt install terraform
+```
+Проверим версию Terraform terraform -v
+![7_1_1](pictures/6_4_1.JPG) 
+_________________________________
 
+__3.	Задача 3. Поддержка легаси кода.__
 
-![6_4_1](pictures/6_4_1.JPG) 
+__В какой-то момент вы обновили терраформ до новой версии, например с 0.12 до 0.13. А код одного из проектов настолько устарел, что не может работать с версией 0.13. В связи с этим необходимо сделать так, чтобы вы могли одновременно использовать последнюю версию терраформа установленную при помощи штатного менеджера пакетов и устаревшую версию 0.12.__
 
+__В виде результата этой задачи приложите вывод --version двух версий терраформа доступных на вашем компьютере или виртуальной машине.__
+
+__Решение:__
+
+Скачаем и распакуем устаревшую версию Terraform 0.12.0 в рабочую папку:
+```
+artem@ubuntu:~/Netology_7_1_IaaC$ sudo wget https://releases.hashicorp.com/terraform/0.12.0/terraform_0.12.0_linux_amd64.zip
+--2022-07-27 03:58:00--  https://releases.hashicorp.com/terraform/0.12.0/terraform_0.12.0_linux_amd64.zip
+Распознаётся releases.hashicorp.com (releases.hashicorp.com)… 146.75.114.49
+Подключение к releases.hashicorp.com (releases.hashicorp.com)|146.75.114.49|:443... соединение установлено.
+HTTP-запрос отправлен. Ожидание ответа… 200 OK
+Длина: 14907580 (14M) [application/zip]
+Сохранение в: «terraform_0.12.0_linux_amd64.zip»
+terraform_0.12.0_linux_amd64.zip 100%[=======================================================>]  14,22M  2,49MB/s    за 7,2s    
+2022-07-27 03:58:09 (1,96 MB/s) - «terraform_0.12.0_linux_amd64.zip» сохранён [14907580/14907580]
+```
+Извлечем:
+```
+artem@ubuntu:~/Netology_7_1_IaaC$ unzip terraform_0.12.0_linux_amd64.zip
+Archive:  terraform_0.12.0_linux_amd64.zip
+error:  cannot create terraform
+        Permission denied
+artem@ubuntu:~/Netology_7_1_IaaC$ sudo unzip terraform_0.12.0_linux_amd64.zip
+Archive:  terraform_0.12.0_linux_amd64.zip
+  inflating: terraform  
+```
+Проверим:
+artem@ubuntu:~/Netology_7_1_IaaC$ ls -lha
+итого 58M
+drwxr-xr-x  2 root  root  4,0K июл 27 03:58 .
+drwxr-xr-x 32 artem artem 4,0K июл 27 03:57 ..
+-rwxrwxr-x  1 root  root   44M мая 22  2019 terraform
+-rw-r--r--  1 root  root   15M мая  9 09:38 terraform_0.12.0_linux_amd64.zip
+
+Воспользуемся созданием символьные ссылки на две версии программы:
+```
+artem@ubuntu:~/Netology_7_1_IaaC$ sudo ln -s /usr/bin/terraform /usr/bin/terraform_1.2.5
+artem@ubuntu:~/Netology_7_1_IaaC$ sudo ln -s ~/Netology_7_1_IaaC/terraform /usr/bin/terraform_0.12.0
+```
+Проверим:
+```
+artem@ubuntu:~/Netology_7_1_IaaC$ terraform_1.2.5 -v
+Terraform v1.2.5
+on linux_amd64
+
+artem@ubuntu:~/Netology_7_1_IaaC$ terraform_0.12.0 -v
+Terraform v0.12.0
+artem@ubuntu:~/Netology_7_1_IaaC
+```
