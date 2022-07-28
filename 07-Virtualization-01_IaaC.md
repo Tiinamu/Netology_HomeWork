@@ -128,6 +128,7 @@ sudo apt update
 sudo apt install terraform
 ```
 Проверим версию Terraform terraform -v
+
 ![7_1_1](pictures/7_1_1.JPG) 
 _________________________________
 
