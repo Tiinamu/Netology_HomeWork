@@ -34,7 +34,8 @@ __1.	Задача 1 (Вариант с Yandex.Cloud). Регистрация в 
 __Решение:__
 
 1.1)	Регистрация была выполнена в рамках ДЗ 5-4. 
-1.2)	Проверим вывод команды yc config list
+1.2)	Проверим вывод команды yc config list:
+
 ```
 artem@ubuntu:~$ yc config list
 token: AQAAAAAN_tZ5AATuwSsx5JrfJUgGr8kj0SbPdKY
