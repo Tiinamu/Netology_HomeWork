@@ -1,4 +1,4 @@
-## Домашнее задание к занятию "7.3. Основы и принцип работы Терраформ"
+## Домашнее задание к занятию "7.3. Основы и принцип работы Terraform"
 
 __1.	Задача 1__
 
@@ -345,7 +345,7 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform apply
 
 ![7_3_7](pictures/7_3_7.JPG) 
 
-Вывод *terraform plan* для *prod* (c использованием *count*)
+Вывод *terraform plan* для *prod* (c использованием *count*):
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform plan
 
@@ -541,7 +541,7 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 Теперь всё тоже самое, но вместо *count* – используем *for_each*.
 
-Переделаем файл *main.tf* с *for_each*:
+Переделаем файл *main.tf* под *for_each*:
 ```
 provider "yandex" {
   cloud_id  = "b1g4u3sfpchj6i21hp7f"
