@@ -114,7 +114,7 @@ func Result_number() (condition_divided_3 []int) {
 	}
 	return
 }
-```
+
 func main() {
 	number_ok := Result_number()
 	fmt.Printf("Числа от 1 до 100, которые делятся на 3 без остатка: %v\n", number_ok)
