@@ -108,7 +108,7 @@ import "fmt"
 
 func Result_number() (condition_divided_3 []int) {
 	for i := 1; i <= 100; i++ {
-		if i%3 == 0 { //проверка условия деления на "3"
+		if i%3 == 0 {                                                //проверка условия деления на "3"
 			condition_divided_3 = append(condition_divided_3, i)
 		}
 	}
