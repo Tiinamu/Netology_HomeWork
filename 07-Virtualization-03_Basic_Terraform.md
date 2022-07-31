@@ -29,7 +29,7 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ yc resource-manager folder list
 | admin   | system         | allAuthenticatedUsers |
 +---------+----------------+-----------------------+
 ```
-Посмотрим:
+Посмотрим на сервисные учетные записи:
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ yc iam service-account list
 +----------------------+----------+
@@ -38,7 +38,7 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ yc iam service-account list
 | aje10prv6nj8qjr5roku | my-robot |
 +----------------------+----------+
 ```
-Для сервисной учеутной записи my-robot получим значения access-key и secret_key, чтобы потом применить их в main.tf при создании бакета:
+Для сервисной учеутной записи *my-robot* получим значения *access-key* и *secret_key*, чтобы потом применить их в *main.tf* при создании бакета:
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ yc iam access-key create --service-account-name my-robot
 access_key:
@@ -53,7 +53,7 @@ See release notes at https://cloud.yandex.ru/docs/cli/release-notes
 You can install it by running the following command in your shell:
 	$ yc components update
 ```
-Содержание файла main.tf:
+Подготовим .tf-файл. Содержание файла *main.tf*:
 ```
 provider "yandex" {
   cloud_id  = "b1g4u3sfpchj6i21hp7f"
@@ -76,8 +76,11 @@ artem@ubuntu:~/Netology_7_3_test/terraform$ sudo terraform apply
 ```
 Видим, что в YC создался бакет (пустой)
 
-Далее переходим в рабочий проект artem@ubuntu:~/Netology_7_3_Terraform/terraform$
-Меняем имена сети и подсети на, добавляя двойку в суффикс, чтобы имена не пересекались с сетью и подсетью, используемые под бакет:
+Далее переходим во вновь созданный рабочий проект 
+```
+artem@ubuntu:~/Netology_7_3_Terraform/terraform$
+```
+Меняем имена сети и подсети на, добавляя двойку в суффикс, чтобы имена не пересекались с сетью и подсетью, используемые в проекте под бакет:
 
 Сожержимое файла network.tf
 ```
@@ -93,7 +96,7 @@ resource "yandex_vpc_subnet" "default" {
   v4_cidr_blocks = ["192.168.101.0/24"]
 }
 ```
-Содержание файла main.tf:
+Подготовим .tf-файл. Содержание файла *main.tf*:
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ cat nano main.tf 
 
@@ -166,6 +169,7 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform apply
 Видим, что в YC в ранее созданный бакет поместился стейт – terraform.tfstate
 ![7_3_1](pictures/7_3_1.JPG)  
 
+![7_3_2](pictures/7_3_2.JPG)  
 
 __Задача 2. Инициализируем проект и создаем воркспейсы.__
 
@@ -191,7 +195,7 @@ __В виде результата работы пришлите:__
 
 __Решение:__
 
-Создадим два worspace
+Создадим два worspace - *prod* и *stage*:
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform workspace new prod
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform workspace new stage
@@ -205,22 +209,18 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ terraform workspace list
 ```
 Проверим переключение между workspace-ами:
 ```
-artem@ubuntu:~/Netology_7_3_Terraform/terraform$ terraform workspace list
+artem@ubuntu:~/Netology_7_3_Terraform/terraform$ terraform workspace select prod:
   default
 * prod
   Stage
 ```
 
 В YC при этом появились соответствующие каталоги в бакете со стейтами внутри (terraform.tfstate):
-![7_3_2](pictures/7_3_2.JPG)  
+![7_3_3](pictures/7_3_3.JPG)  
 
 Теперь посмотрим, как можно автоматизировать разворачивание ВМ через workspace-ы:
-```
-locals {
-  instance_name = "${terraform.workspace}-instance"
-}
-```
-Допишем файл main.tf с count-ом
+
+Допишем файл *main.tf* с count-ом для создания требуемого количества экземпляров ВМ в инстансе в зависимости от выбранного *workspace*.
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ cat main.tf 
 provider "yandex" {
@@ -303,7 +303,7 @@ resource "yandex_compute_instance" "count_vm" {
   }
 }
 ```
-Выберем workspase prod:
+Выберем *workspase prod*:
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform workspace select prod
 ```
@@ -321,11 +321,10 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform plan
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform apply
 ```
 Посмотрим в Облаке:
-![7_3_3](pictures/7_3_3.JPG)  
-
 ![7_3_4](pictures/7_3_4.JPG)  
+![7_3_5](pictures/7_3_5.JPG)  
 
-Выберем workspase stage:
+Выберем *workspase stage*:
 ```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform workspace select stage
 ```
@@ -342,12 +341,12 @@ artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform init
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform plan
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform apply
 ```
-![7_3_5](pictures/7_3_5.JPG) 
-
 ![7_3_6](pictures/7_3_6.JPG) 
 
-Вывод terraform plan для prod (c использованием count)
+![7_3_7](pictures/7_3_7.JPG) 
 
+Вывод *terraform plan* для *prod* (c использованием *count*)
+```
 artem@ubuntu:~/Netology_7_3_Terraform/terraform$ sudo terraform plan
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
@@ -538,14 +537,12 @@ Plan: 5 to add, 0 to change, 0 to destroy.
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+```
 
+Теперь всё тоже самое, но вместо *count* – используем *for_each*.
 
-
-
-Теперь всё тоже самое, но вместо count – используем for_each.
-
-Переделаем файл main.tf с for_each
-
+Переделаем файл *main.tf* с *for_each*:
+```
 provider "yandex" {
   cloud_id  = "b1g4u3sfpchj6i21hp7f"
   folder_id = "b1gjl0488dbj7totafg8"
@@ -583,14 +580,6 @@ locals {
 
 }
 
-
-#resource "yandex_storage_bucket" "test" {
-#  access_key = "YCAJEe1qfB6ng9cSWti6Q0wzD"
-#  secret_key = "YCM1LJ8lBvph0T4j43juSJu0FBdJk1tuXOg0-UDv"
-#  bucket = "tiinamu-bucket"
-  
-#}
-
 terraform {
   backend "s3" {
     endpoint   = "storage.yandexcloud.net"
@@ -605,15 +594,9 @@ terraform {
   }
 }
 
-
 resource "yandex_compute_image" "image" {
   source_family = "centos-8"
 }
-
-#создадим первый инстанст, в котором будет использоваться count
-#удалил, чтобы не перегружать
-
-#resource "yandex_compute_instance" "count_vm" {
 
 #создадим второй инстанс, в котором будет использоваться for-each
 resource "yandex_compute_instance" "for_each_vm" {
@@ -635,7 +618,6 @@ resource "yandex_compute_instance" "for_each_vm" {
   boot_disk {
     initialize_params {
       image_id    = "${yandex_compute_image.image.id}"
-#      name        = "root-vm1"
       name        = "root-${terraform.workspace}-${each.key}"
       type        = "network-nvme"
       size        = local.disk_size[terraform.workspace]
@@ -652,6 +634,7 @@ resource "yandex_compute_instance" "for_each_vm" {
   }
 
 }
+```
 
-Результаты с for_each будут идентичными:
-![7_3_7](pictures/7_3_7.JPG) 
+Результаты с *for_each* будут идентичными:
+![7_3_8](pictures/7_3_8.JPG) 
