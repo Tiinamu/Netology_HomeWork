@@ -62,7 +62,7 @@ artem@ubuntu:~/Netology_7_5_Providers_Terraform/terraform-provider-aws/internal/
 https://github.com/hashicorp/terraform-provider-aws/blob/main/internal/provider/provider.go#:~:text=DataSourcesMap%3A%20map%5Bstring%5D*schema.Resource%7B
 
 __2).	Для создания очереди сообщений SQS используется ресурс aws_sqs_queue у которого есть параметр name.__
-o	С каким другим параметром конфликтует name? Приложите строчку кода, в которой это указано.
+- С каким другим параметром конфликтует name? Приложите строчку кода, в которой это указано.
 
 Ответ: перейдем в 
 
@@ -85,8 +85,8 @@ https://github.com/hashicorp/terraform-provider-aws/blob/main/internal/service/s
 			ConflictsWith: []string{"name"},
 		},
 ```
-o	Какая максимальная длина имени?
-o	Какому регулярному выражению должно подчиняться имя?
+- Какая максимальная длина имени?
+- Какому регулярному выражению должно подчиняться имя?
 
 Ответ: максимальная длина имени – 80, регулярные выражения ниже:
 
