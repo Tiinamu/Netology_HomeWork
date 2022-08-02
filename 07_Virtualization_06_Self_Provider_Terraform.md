@@ -11,7 +11,7 @@ __1.	Задача 1__
 
 __Давайте потренируемся читать исходный код AWS провайдера, который можно склонировать от сюда: https://github.com/hashicorp/terraform-provider-aws.git. Просто найдите нужные ресурсы в исходном коде и ответы на вопросы станут понятны.__
 
-__1.	Найдите, где перечислены все доступные resource и data_source, приложите ссылку на эти строки в коде на гитхабе.__
+__1).	Найдите, где перечислены все доступные resource и data_source, приложите ссылку на эти строки в коде на гитхабе.__
 
 Решение
 
@@ -61,7 +61,7 @@ artem@ubuntu:~/Netology_7_5_Providers_Terraform/terraform-provider-aws/internal/
 
 https://github.com/hashicorp/terraform-provider-aws/blob/main/internal/provider/provider.go#:~:text=DataSourcesMap%3A%20map%5Bstring%5D*schema.Resource%7B
 
-__2.	Для создания очереди сообщений SQS используется ресурс aws_sqs_queue у которого есть параметр name.__
+__2).	Для создания очереди сообщений SQS используется ресурс aws_sqs_queue у которого есть параметр name.__
 o	С каким другим параметром конфликтует name? Приложите строчку кода, в которой это указано.
 
 Ответ: перейдем в 
