@@ -513,11 +513,11 @@ kibana                     : ok=9    changed=0    unreachable=0    failed=0    s
 
 __8.	Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.__
 
-Ответ: выполнено
+Ответ: 
 
 __9.	Готовый playbook выложите в свой репозиторий, в ответ предоставьте ссылку на него.__
 
-Ответ: выполнено
+Ответ: https://github.com/Tiinamu/Netology_HomeWork/tree/main/Netology_8_2_Playbook/playbook
 
 __Необязательная часть__
 1.	Приготовьте дополнительный хост для установки logstash.
