@@ -513,7 +513,7 @@ kibana                     : ok=9    changed=0    unreachable=0    failed=0    s
 
 __8.	Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.__
 
-Ответ: 
+Ответ: https://github.com/Tiinamu/Netology_HomeWork/blob/main/Netology_8_2_Playbook/playbook/README.md#9подготовьте-readmemd-файл-по-своему-playbook-в-нём-должно-быть-описано-что-делает-playbook-какие-у-него-есть-параметры-и-теги
 
 __9.	Готовый playbook выложите в свой репозиторий, в ответ предоставьте ссылку на него.__
 
