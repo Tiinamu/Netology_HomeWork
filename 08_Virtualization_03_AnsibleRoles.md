@@ -412,5 +412,7 @@ __10.	Выложили playbook в репозиторий.__
 __11.	Ссылки на оба репозитория с roles и одну ссылку на репозиторий с playbook:__
 
 Репозиторий с elastic-role: https://github.com/Tiinamu/elastic-role.git 
+
 Репозиторий с kibana-role: https://github.com/Tiinamu/kibana-role.git 
+
 Репозиторий с playbook: https://github.com/Tiinamu/playbook.git 
