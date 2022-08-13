@@ -156,11 +156,10 @@ To https://github.com/Tiinamu/elastic-role.git
    861212d..651353e  master -> master
 Ветка «master» отслеживает внешнюю ветку «master» из «origin-elastic».
 ```
-![8_3_3](pictures/8_3_3.JPG) 
 
 __3.	Скачайте дистрибутив java и положите его в директорию playbook/files/.__
 
-![8_3_4](pictures/8_3_4.JPG) 
+![8_3_3](pictures/8_3_3.JPG) 
 
 __4.	Установите molecule: pip3 install molecule__
 ```
@@ -174,7 +173,7 @@ __5.	Добавьте публичную часть своего ключа к �
 ```
 https://github.com/settings/keys 
 ```
-![8_3_5](pictures/8_3_5.JPG) 
+![8_3_4](pictures/8_3_4.JPG) 
 
 __Основная часть__
 
